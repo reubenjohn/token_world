@@ -1,6 +1,6 @@
 # How to develop on this project
 
-token_talkers welcomes contributions from the community.
+token_world welcomes contributions from the community.
 
 **You need PYTHON3!**
 
@@ -9,9 +9,9 @@ This instructions are for linux base systems. (Linux, MacOS, BSD, etc.)
 ## Setting up your own fork of this repo.
 
 - On github interface click on `Fork` button.
-- Clone your fork of this repo. `git clone git@github.com:YOUR_GIT_USERNAME/token_talkers.git`
-- Enter the directory `cd token_talkers`
-- Add upstream repo `git remote add upstream https://github.com/reubenjohn/token_talkers`
+- Clone your fork of this repo. `git clone git@github.com:YOUR_GIT_USERNAME/token_world.git`
+- Enter the directory `cd token_world`
+- Add upstream repo `git remote add upstream https://github.com/reubenjohn/token_world`
 
 ## Help
 

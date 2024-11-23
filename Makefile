@@ -25,21 +25,21 @@ install:          ## Install the project in dev mode.
 
 .PHONY: fmt
 fmt:              ## Format code using black & isort.
-	$(ENV_PREFIX)isort token_talkers/
-	$(ENV_PREFIX)black token_talkers/
+	$(ENV_PREFIX)isort token_world/
+	$(ENV_PREFIX)black token_world/
 	$(ENV_PREFIX)black tests/
 
 .PHONY: lint
 lint:             ## Run pep8, black, mypy linters.
 	@echo $(ENV_PREFIX)
-	$(ENV_PREFIX)flake8 token_talkers/
-	$(ENV_PREFIX)black --check token_talkers/
+	$(ENV_PREFIX)flake8 token_world/
+	$(ENV_PREFIX)black --check token_world/
 	$(ENV_PREFIX)black --check tests/
-	$(ENV_PREFIX)mypy --ignore-missing-imports token_talkers/
+	$(ENV_PREFIX)mypy --ignore-missing-imports token_world/
 
 .PHONY: test
 test: lint        ## Run tests and generate coverage report.
-	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=token_talkers -l --tb=short --maxfail=1 tests/
+	$(ENV_PREFIX)pytest -v --cov-config .coveragerc --cov=token_world -l --tb=short --maxfail=1 tests/
 	$(ENV_PREFIX)coverage xml
 	$(ENV_PREFIX)coverage html
 
@@ -67,9 +67,9 @@ clean:            ## Clean unused files.
 release:          ## Create a new tag for release.
 	@echo "WARNING: This operation will create s version tag and push to github"
 	@read -p "Version? (provide the next x.y.z semver) : " TAG
-	@echo "$${TAG}" > token_talkers/VERSION
+	@echo "$${TAG}" > token_world/VERSION
 	@$(ENV_PREFIX)gitchangelog > HISTORY.md
-	@git add token_talkers/VERSION HISTORY.md
+	@git add token_world/VERSION HISTORY.md
 	@git commit -m "release: version $${TAG} 🚀"
 	@echo "creating git tag : $${TAG}"
 	@git tag $${TAG}

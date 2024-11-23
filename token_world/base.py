@@ -1,7 +1,7 @@
 """
-token_talkers base module.
+token_world base module.
 
-This is the principal module of the token_talkers project.
+This is the principal module of the token_world project.
 here you put your main classes and objects.
 
 Be creative! do whatever you want!
@@ -14,4 +14,4 @@ and then choose `flask` as template.
 """
 
 # example constant variable
-NAME = "token_talkers"
+NAME = "token_world"

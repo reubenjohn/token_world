@@ -7,7 +7,7 @@ import os
 
 def main():  # pragma: no cover
     """
-    `python -m token_talkers` and `$ token_talkers`.
+    `python -m token_world` and `$ token_world`.
     This function sets up a command-line interface (CLI) using argparse to parse
     the required `--openai_base_url` and `--api_key` arguments for the OpenAI API.
     It then creates an OpenAI client and sends a chat completion request to the API

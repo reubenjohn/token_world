@@ -1,5 +1,5 @@
-from token_talkers.base import NAME
+from token_world.base import NAME
 
 
 def test_base():
-    assert NAME == "token_talkers"
+    assert NAME == "token_world"

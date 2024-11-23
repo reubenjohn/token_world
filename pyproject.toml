@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "token_talkers"
+name = "token_world"
 version = "0.1.0"
 description = ""
 authors = ["rochacbruno"]
 readme = "README.md"
-packages = [{include = "token_talkers"}]
+packages = [{include = "token_world"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -30,7 +30,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-token_talkers = 'token_talkers.__main__:main'
+token_world = 'token_world.__main__:main'
 
 [tool.black]
 line-length = 100
