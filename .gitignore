@@ -133,3 +133,6 @@ dmypy.json
 
 # Environment files
 .env
+
+# World Files
+worlds/

@@ -702,6 +702,14 @@ optional = false
 python-versions = ">=3.8"
 
 [[package]]
+name = "pyglet"
+version = "2.0.18"
+description = "pyglet is a cross-platform games and multimedia package."
+category = "main"
+optional = false
+python-versions = ">=3.8"
+
+[[package]]
 name = "Pygments"
 version = "2.18.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -987,7 +995,7 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "48bda6cd6bb2c37e905da7216431c23fc197df43ae406674fb1031c32c4db4ad"
+content-hash = "c57c1b4eff704c64c38e8c34f2618fc8598e7e1b942f9a2c8ab7b6dbc62aebfc"
 
 [metadata.files]
 aiohappyeyeballs = [
@@ -2050,6 +2058,10 @@ pydantic-core = [
 pyflakes = [
     {file = "pyflakes-3.2.0-py2.py3-none-any.whl", hash = "sha256:84b5be138a2dfbb40689ca07e2152deb896a65c3a3e24c251c5c62489568074a"},
     {file = "pyflakes-3.2.0.tar.gz", hash = "sha256:1c61603ff154621fb2a9172037d84dca3500def8c8b630657d1701f026f8af3f"},
+]
+pyglet = [
+    {file = "pyglet-2.0.18-py3-none-any.whl", hash = "sha256:e592952ae0297e456c587b6486ed8c3e5f9d0c3519d517bb92dde5fdf4c26b41"},
+    {file = "pyglet-2.0.18.tar.gz", hash = "sha256:7cf9238d70082a2da282759679f8a011cc979753a32224a8ead8ed80e48f99dc"},
 ]
 Pygments = [
     {file = "pygments-2.18.0-py3-none-any.whl", hash = "sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a"},

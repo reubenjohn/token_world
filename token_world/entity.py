@@ -1,5 +1,6 @@
 import json
-from typing import Optional
+from pathlib import Path
+from typing import Dict, Optional
 import uuid
 import sqlite3
 
@@ -17,10 +18,16 @@ class Entity:
         return json.dumps(self.properties)
 
 
+def physical_entity(
+    name: str, id: Optional[str] = None, x: float = 0.0, y: float = 0.0, z: float = 0.0, **kwargs
+) -> Entity:
+    return Entity(name, id, is_physical=True, x=x, y=y, z=z, **kwargs)
+
+
 class EntityManager:
-    def __init__(self, db_path):
+    def __init__(self, db_path: Path):
         self.db_path = db_path
-        self.entities = {}
+        self.entities: Dict[ID, Entity] = {}
         self._create_table()
 
     def _create_table(self):

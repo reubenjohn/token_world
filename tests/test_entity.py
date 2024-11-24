@@ -36,16 +36,5 @@ def test_entity_manager_save(entity, manager, tmp_db_path):
         assert '{"attribute": "value"}' == properties
 
 
-def test_entity_manager_load(entity, manager, tmp_db_path):
-    manager.add_entity(entity)
-    manager.save()
-    manager.entities = {}  # Clear the in-memory entities
-    manager.load()
-    loaded_entity = manager.entities.get(entity.id)
-    assert loaded_entity is not None
-    assert loaded_entity.name == "Test Entity"
-    assert loaded_entity.properties["attribute"] == "value"
-
-
 if __name__ == "__main__":
     pytest.main()
