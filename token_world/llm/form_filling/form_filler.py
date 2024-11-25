@@ -6,6 +6,7 @@ from token_world.llm.form_filling.template import (
     TextTemplate,
     ArrayTemplate,
     DictionaryTemplate,
+    get_hint_filled_form,
 )
 from token_world.llm.form_filling.template_parser import Breadcrumbs, parse_template
 
@@ -20,8 +21,12 @@ class FormFillingException(Exception):
 
 
 class FormFiller:
-    def __init__(self, template: str):
-        self._template = parse_template(template)
+    def __init__(self, template_text: str):
+        self.template_text = template_text.strip()
+        self._template = parse_template(template_text)
+
+    def get_hint_filled_form(self) -> str:
+        return get_hint_filled_form(self._template)
 
     def parse(self, xml_input: str) -> FilledElement:
         xml_tree = ET.ElementTree(ET.fromstring(xml_input))
