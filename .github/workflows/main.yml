@@ -44,6 +44,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
       - name: Install project
         run: make install
       - name: Run tests
@@ -72,7 +76,7 @@ jobs:
       - name: Install project
         run: make install
       - name: Run tests
-        run: make test
+        run: make test-headed
 
   # tests_win:
   #   needs: linter

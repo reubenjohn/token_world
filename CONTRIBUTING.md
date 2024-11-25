@@ -64,7 +64,15 @@ Create a `.vscode/settings.json` file in the root of your project with the follo
 This configuration will set up VS Code to use the appropriate settings for linting, formatting, and testing.
 ## Run the tests to ensure everything is working
 
-Run `make test` to run the tests.
+If you are on a headless server, you need to install `xvfb` to run the tests:
+Then, run make test to run the tests.
+
+    # sudo apt install xvbf
+    make test # xvbf is a prerequisite
+
+Alternatively, if you are on a machine with a display, you can run the tests in headed mode:
+
+    make test-headed
 
 ## Create a new branch to work on your contribution
 
