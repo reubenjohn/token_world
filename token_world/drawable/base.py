@@ -3,7 +3,7 @@ from typing import Callable, Dict
 from pyglet.graphics import Batch  # type: ignore[import]
 
 
-from token_world.entity import Entity, EntityDict
+from token_world.entity import Entity
 
 DrawableEntityHandlerId = str
 DrawCallable = Callable[[], None]
@@ -12,7 +12,6 @@ DrawCallable = Callable[[], None]
 class DrawableEntityHandler(ABC):
     def __init__(self, id: DrawableEntityHandlerId):
         self.id = id
-        self._entities: EntityDict = {}
         self._batch = Batch()
 
     @abstractmethod

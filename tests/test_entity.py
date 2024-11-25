@@ -6,7 +6,7 @@ import re
 
 @pytest.fixture
 def entity():
-    return Entity(name="Test Entity", attribute="value")
+    return Entity.new(name="Test Entity", attribute="value")
 
 
 @pytest.fixture

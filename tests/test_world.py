@@ -3,6 +3,9 @@ from unittest.mock import MagicMock, patch
 from pathlib import Path
 from token_world.world import World
 from token_world.entity import Entity
+from token_world.world import persistent_world
+import tempfile
+import shutil
 
 
 @pytest.fixture
@@ -14,6 +17,13 @@ def world_fixture(MockWindow, MockEntityManager):
     mock_window = MockWindow.return_value
     world = World(mock_root_dir)
     return world, mock_root_dir, MockEntityManager, mock_entity_manager, mock_window
+
+
+@pytest.fixture
+def temp_dir():
+    dirpath = tempfile.mkdtemp()
+    yield Path(dirpath)
+    shutil.rmtree(dirpath)
 
 
 def test_init(world_fixture):
@@ -60,3 +70,16 @@ def test_add_entity(world_fixture):
     mock_entity_manager.add_entity.assert_called_once_with(mock_entity)
     assert "draw_callback" in world._draw_callbacks
     assert result == mock_entity
+
+
+def test_persisted_world_load_and_save(temp_dir):
+    mock_handler = MagicMock()
+    with persistent_world(temp_dir, [mock_handler]) as world:
+        assert len(world._entity_manager.entities) == 0
+        mock_entity = Entity.new("mock_entity")
+        world.add_entity(mock_entity)
+        assert len(world._entity_manager.entities) == 1
+
+    with persistent_world(temp_dir, [mock_handler]) as world:
+        assert len(world._entity_manager.entities) == 1
+        assert world._entity_manager.entities[mock_entity.id] == mock_entity

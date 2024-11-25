@@ -1,6 +1,5 @@
 import pytest
 from unittest.mock import MagicMock
-from pyglet.graphics import Batch  # type: ignore[import]
 from token_world.entity import Entity
 from token_world.drawable.physical import PhysicalEntityHandler
 
@@ -14,7 +13,7 @@ def entity_fixture():
 
 @pytest.fixture
 def batch_fixture():
-    return MagicMock(spec=Batch)
+    return MagicMock()
 
 
 def test_is_applicable(entity_fixture):
