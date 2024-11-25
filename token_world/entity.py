@@ -4,11 +4,11 @@ from typing import Dict, Optional
 import uuid
 import sqlite3
 
-
-ID = str
+EntityId = str
 
 
 class Entity:
+
     def __init__(self, name: str, id: Optional[str] = None, **kwargs):
         self.id = id or str(uuid.uuid4())
         self.name = name
@@ -16,6 +16,9 @@ class Entity:
 
     def properties_json(self) -> str:
         return json.dumps(self.properties)
+
+
+EntityDict = Dict[EntityId, Entity]
 
 
 def physical_entity(
@@ -27,7 +30,7 @@ def physical_entity(
 class EntityManager:
     def __init__(self, db_path: Path):
         self.db_path = db_path
-        self.entities: Dict[ID, Entity] = {}
+        self.entities: EntityDict = {}
         self._create_table()
 
     def _create_table(self):
