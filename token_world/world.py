@@ -6,16 +6,23 @@ from pyglet.gl import glClearColor  # type: ignore[import]
 
 from token_world.drawable.base import DrawableEntityHandler, DrawableEntityHandlerDict, DrawCallable
 from token_world.entity import Entity, EntityManager
+from token_world.person import PeopleManager
 
 
 class World:
     DB_FILE = "world.db"
 
-    def __init__(self, root_dir: Path, handlers: List[DrawableEntityHandler] = []):
+    def __init__(
+        self,
+        root_dir: Path,
+        people_manager: PeopleManager,
+        handlers: List[DrawableEntityHandler] = [],
+    ):
         root_dir.mkdir(exist_ok=True, parents=True)
         self._entity_manager = EntityManager(root_dir / self.DB_FILE)
         self._drawable_entity_handler: DrawableEntityHandlerDict = {}
         self._draw_callbacks: List[DrawCallable] = []
+        self._people_manager = people_manager
 
         self._window = Window(width=800, height=600)
 
@@ -47,6 +54,9 @@ class World:
 
     def add_entity(self, entity: Entity):
         self._entity_manager.add_entity(entity)
+        if self._people_manager.is_person(entity):
+            self._people_manager.add_entity(entity)
+
         for handler in self._drawable_entity_handler.values():
             if handler.is_applicable(entity):
                 self._draw_callbacks.append(handler.new_draw_callback(entity))
@@ -54,8 +64,10 @@ class World:
 
 
 @contextmanager
-def persistent_world(root_dir: Path, handlers: List[DrawableEntityHandler]):
-    world = World(root_dir, handlers)
+def persistent_world(
+    root_dir: Path, people_manager: PeopleManager, handlers: List[DrawableEntityHandler]
+):
+    world = World(root_dir, people_manager, handlers)
     world.load()
     try:
         yield world
