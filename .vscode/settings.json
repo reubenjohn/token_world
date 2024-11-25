@@ -5,4 +5,7 @@
     "flake8.importStrategy": "fromEnvironment",
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "black-formatter.importStrategy": "fromEnvironment",
+    "python.testing.pytestArgs": [
+        "-vv",
+    ]
 }
