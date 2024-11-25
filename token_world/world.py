@@ -47,13 +47,17 @@ class World:
     def load(self):
         self._entity_manager.load()
         for entity in self._entity_manager.entities.values():
-            self.add_entity(entity)
+            self._on_add_entity(entity)
 
     def save(self):
         self._entity_manager.save()
 
-    def add_entity(self, entity: Entity):
+    def add_entity(self, entity: Entity) -> Entity:
         self._entity_manager.add_entity(entity)
+        self._on_add_entity(entity)
+        return entity
+
+    def _on_add_entity(self, entity: Entity):
         if self._people_manager.is_person(entity):
             self._people_manager.add_entity(entity)
 

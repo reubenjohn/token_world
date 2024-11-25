@@ -53,6 +53,8 @@ class EntityManager:
             conn.commit()
 
     def add_entity(self, entity):
+        if entity.id in self.entities:
+            raise ValueError(f"Entity with id {entity.id} already managed")
         self.entities[entity.id] = entity
 
     def save(self):
