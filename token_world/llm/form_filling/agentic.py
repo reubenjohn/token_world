@@ -106,6 +106,15 @@ def fill_form(
     )
 
 
+def extract_form_content(text: str) -> str:
+    if (start_index := text.find("<FORM>")) == -1:
+        raise ValueError("<FORM> tag not found in text")
+    if (end_index := text.rfind("</FORM>", start_index)) == -1:
+        raise ValueError("</FORM> tag not found in text")
+    end_index += 7
+    return text[start_index:end_index]
+
+
 def _attempt_form_filling(
     response: AgentResponse,
     traversal: MessageTreeTraversal[Message],
@@ -113,8 +122,12 @@ def _attempt_form_filling(
 ) -> FilledForm:
     traversal.go_to_new_descendant(response.messages)
 
+    try:
+        form_xml = extract_form_content(traversal.get_current_message()["content"])
+    except ValueError as e:
+        raise FormFillingException(f"No form content found in the response: {e}")
     # Attempt to parse the filled form
-    parsed_form = form_filler.parse(traversal.get_current_message()["content"])
+    parsed_form = form_filler.parse(form_xml)
     if not isinstance(parsed_form, dict):
         raise TypeError(f"Expected FilledDictionary, got {type(parsed_form).__name__}")
     return FilledForm(parsed_form, response)

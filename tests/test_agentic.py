@@ -7,6 +7,7 @@ from xml.etree.ElementTree import ParseError
 from token_world.llm.form_filling.form_filler import FormFiller, FormFillingException
 from token_world.llm.message_tree import MessageTreeTraversal
 from token_world.llm.form_filling.agentic import (
+    extract_form_content,
     get_default_feedback_message,
     fill_form,
     Message,
@@ -83,6 +84,55 @@ def test_get_default_feedback_message_form_filling_exception(simple_form_filler,
     assert feedback_message["sender"] == expected_message["sender"]
     assert feedback_message["message"] == expected_message["message"]
     assert feedback_message == expected_message
+
+
+def test_extract_form_content_valid():
+    content = """<FORM>
+        <TEXT>Sample content</TEXT>
+    </FORM>"""
+    text = f"""
+    Some text before
+    {content}
+    Some text after
+    """
+    assert extract_form_content(text) == content
+
+
+def test_extract_form_content_missing_opening_tag():
+    text = """
+    Some text before
+    <TEXT>Sample content</TEXT>
+    </FORM>
+    Some text after
+    """
+    with pytest.raises(ValueError, match="<FORM> tag not found in text"):
+        extract_form_content(text)
+
+
+def test_extract_form_content_missing_closing_tag():
+    text = """
+    Some text before
+    <FORM>
+        <TEXT>Sample content</TEXT>
+    Some text after
+    """
+    with pytest.raises(ValueError, match="</FORM> tag not found in text"):
+        extract_form_content(text)
+
+
+def test_extract_form_content_nested_form():
+    content = """<FORM>
+        <TEXT>Sample content</TEXT>
+        <FORM>
+            <TEXT>Nested content</TEXT>
+        </FORM>
+    </FORM>"""
+    text = f"""
+    Some text before
+    {content}
+    Some text after
+    """
+    assert extract_form_content(text) == content
 
 
 def test_fill_form_success(simple_form_filler):
