@@ -42,27 +42,28 @@ class MessageNode(Generic[Message]):
         return chain
 
 
+@dataclass
 class MessageTree(Generic[Message]):
-    def __init__(self, root: Optional[MessageNode[Message]] = None):
-        self.root = (
-            root
-            if root is not None
-            else MessageNode[Message](tree=self, _message=None, _parent=None, children=[])
-        )
+    root: MessageNode[Message]
+
+    @staticmethod
+    def new(root: Optional[MessageNode[Message]] = None):
+        tree: MessageTree = None  # type: ignore
+        if root is None:
+            root = MessageNode[Message](tree=tree, _message=None, _parent=None, children=[])
+        root.tree = MessageTree(root=root)
+        return root.tree
 
 
 @dataclass
 class MessageTreeTraversal(Generic[Message]):
-    tree: MessageTree[Message]
     node: MessageNode[Message]
 
     @staticmethod
-    def new(
-        tree: Optional[MessageTree[Message]] = None, node: Optional[MessageNode[Message]] = None
-    ) -> "MessageTreeTraversal[Message]":
-        tree = tree if tree is not None else MessageTree[Message]()
-        node = node if node is not None else tree.root
-        return MessageTreeTraversal[Message](tree, node)
+    def new(node: Optional[MessageNode[Message]] = None) -> "MessageTreeTraversal[Message]":
+        if node is None:
+            node = MessageTree[Message].new().root
+        return MessageTreeTraversal[Message](node)
 
     def go_to_new_child(self, message: Message) -> "MessageTreeTraversal[Message]":
         self.node = self.node.add_child(message)
@@ -84,7 +85,7 @@ class MessageTreeTraversal(Generic[Message]):
         return self
 
     def go_to_root(self) -> "MessageTreeTraversal[Message]":
-        self.node = self.tree.root
+        self.node = self.node.tree.root
         return self
 
     def go_to_ancestor(self, ancestor: MessageNode[Message]) -> "MessageTreeTraversal[Message]":
