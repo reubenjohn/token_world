@@ -6,7 +6,7 @@ from pyglet.gl import glClearColor  # type: ignore[import]
 
 from token_world.drawable.base import DrawableEntityHandler, DrawableEntityHandlerDict, DrawCallable
 from token_world.entity import Entity, EntityManager
-from token_world.person import PeopleManager
+from token_world.person.person import PeopleManager
 
 
 class World:

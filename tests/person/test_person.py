@@ -1,4 +1,4 @@
-from token_world.person import person_entity
+from token_world.person.person import person_entity
 from token_world.entity import Entity
 
 

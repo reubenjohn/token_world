@@ -8,7 +8,7 @@ from pyglet.app import run  # type: ignore[import]
 
 from token_world.drawable.physical import PhysicalEntityHandler
 from token_world.environment import Environment
-from token_world.person import people_manager_executor, person_entity
+from token_world.person.person import people_manager_executor, person_entity
 from token_world.world import persistent_world
 
 from openai import OpenAI

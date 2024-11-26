@@ -5,7 +5,7 @@ from token_world.drawable.base import DrawableEntityHandler
 from token_world.world import World
 from token_world.entity import Entity, EntityManager
 from token_world.world import persistent_world
-from token_world.person import PeopleManager
+from token_world.person.person import PeopleManager
 import tempfile
 import shutil
 

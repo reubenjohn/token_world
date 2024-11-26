@@ -13,27 +13,8 @@ from time import sleep
 from typing import Dict, Iterator, List, Optional
 
 from token_world.entity import Entity, physical_entity, EntityId
-from token_world.environment import Environment
-
-
-def pretty_print_messages(messages) -> None:
-    for message in messages:
-        # print agent name in blue
-        print(f"\033[94m{message['sender']}\033[0m:", end=" ")
-
-        # print response, if any
-        if message["content"]:
-            print(message["content"])
-
-        # print tool calls in purple, if any
-        tool_calls = message.get("tool_calls") or []
-        if len(tool_calls) > 1:
-            print()
-        for tool_call in tool_calls:
-            f = tool_call["function"]
-            name, args = f["name"], f["arguments"]
-            arg_str = json.dumps(json.loads(args)).replace(":", "=")
-            print(f"\033[95m{name}\033[0m({arg_str[1:-1]})")
+from token_world.environment import Environment, pretty_print_messages
+from token_world.llm.message_tree import MessageTreeTraversal
 
 
 def person_entity(
@@ -50,17 +31,36 @@ class PersonHandler:
             model="llama3.1:8b",
             tool_choice="required",
             instructions="""
-Interact with your environment
-            """,
+You are a highly intelligent and autonomous agent living in an open world.
+Your primary objective is to interact with the world around you, learn from these interactions, 
+and evolve your goals over time.
+As you interact with the environment and other entities, continuously reassess and refine your 
+goals to adapt to new information and changing circumstances.
+Think step by step and always consider the long-term implications of your actions.
+Document your thought process and decisions to help improve your future interactions.
+Initially, you may have a limited understanding of your environment, so stick to simple actions, you may use more sophisticated actions as you learn what actions are valid in the environment.
+
+After you have produced a detailed rundown of your thought process, output the following in exactly the following format:
+#THOUGHTS#
+<Your internal thought process>
+
+#GOALS#
+- Goal 1
+- Goal 2
+...
+
+#ACTION#
+<A single (concise) action to perform in textual form>
+""",
         )
 
         # code_classifier_agent.functions.append(file_contains_code)
         # code_register_agent.functions.append(register_element)
 
-        self.messages: List[dict] = []
+        self.message_tree: MessageTreeTraversal()
 
     def act(self, client: Swarm):
-        logging.info(f"🤔 Person {self._entity.id} is acting 🤔")
+        logging.info(f"🤔 Agent {self._entity.id} is acting 🤔")
         while True:
             response = client.run(agent=self.agent, messages=self.messages, stream=True)
 
@@ -85,7 +85,7 @@ Interact with your environment
                 continue
             break
         self.messages.extend(response.messages)
-        logging.info(f"✅ Person {self._entity.id} has acted ✅")
+        logging.info(f"✅ Agent {self._entity.id} has acted ✅")
 
 
 class PeopleManager:

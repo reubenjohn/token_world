@@ -46,7 +46,3 @@ def test_entity_manager_save(entity, manager, tmp_db_path):
         name, properties = cursor.fetchone()
         assert name == "Test Entity"
         assert '{"attribute": "value"}' == properties
-
-
-if __name__ == "__main__":
-    pytest.main()
