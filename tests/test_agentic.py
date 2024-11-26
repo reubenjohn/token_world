@@ -33,13 +33,7 @@ def simple_form_filler():
 
 @pytest.fixture
 def simple_reminder():
-    return """Here is the form template again:
-<FORM>
-    Form hint goes here...
-    <TEXT minWordCount="5" maxWordCount="10">Sample hint</TEXT>
-</FORM>
-
-An example of a compliant response is:
+    return """An example of a compliant response is:
 <FORM>
   Form hint goes here...
   <TEXT>Sample hint</TEXT>
@@ -53,7 +47,7 @@ def test_get_default_feedback_message_parse_error(simple_form_filler, simple_rem
     expected_message = {
         "role": "system",
         "sender": "System",
-        "message": f"""Error filling form: {exception}
+        "content": f"""Error filling form: {exception}
 **The filled form is not valid XML.**
 
 {simple_reminder}""",
@@ -62,7 +56,7 @@ def test_get_default_feedback_message_parse_error(simple_form_filler, simple_rem
     feedback_message = get_default_feedback_message(simple_form_filler, exception, agent_response)
     assert feedback_message["role"] == expected_message["role"]
     assert feedback_message["sender"] == expected_message["sender"]
-    assert feedback_message["message"] == expected_message["message"]
+    assert feedback_message["content"] == expected_message["content"]
     assert feedback_message == expected_message
 
 
@@ -73,7 +67,7 @@ def test_get_default_feedback_message_form_filling_exception(simple_form_filler,
     expected_message = {
         "role": "system",
         "sender": "System",
-        "message": f"""Error filling form: {exception}
+        "content": f"""Error filling form: {exception}
 **The filled form is valid XML but does not match the template.**
 
 {simple_reminder}""",
@@ -82,7 +76,7 @@ def test_get_default_feedback_message_form_filling_exception(simple_form_filler,
     feedback_message = get_default_feedback_message(simple_form_filler, exception, agent_response)
     assert feedback_message["role"] == expected_message["role"]
     assert feedback_message["sender"] == expected_message["sender"]
-    assert feedback_message["message"] == expected_message["message"]
+    assert feedback_message["content"] == expected_message["content"]
     assert feedback_message == expected_message
 
 

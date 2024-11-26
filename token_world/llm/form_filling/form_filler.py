@@ -32,6 +32,9 @@ class FormFiller:
         xml_tree = ET.ElementTree(ET.fromstring(xml_input))
         return self._parse_element(self._template, xml_tree.getroot(), Breadcrumbs())
 
+    def _attrib_text(self, element: ET.Element) -> str:
+        return " ".join(f'{key}="{value}"' for key, value in element.attrib.items())
+
     def _parse_element(
         self,
         template: Template,
@@ -47,7 +50,10 @@ class FormFiller:
                 f"{type(template).__name__} '{breadcrumbs}': expected but found '{element.tag}'"
             )
         if element.attrib != {}:
-            raise FormFillingException(f"Element '{element.tag}' must not have attributes")
+            raise FormFillingException(
+                f"Element '{breadcrumbs}': Must not have attributes. "
+                f"Remove {self._attrib_text(element)} and try again."
+            )
         if isinstance(template, TextTemplate):
             return self._parse_text_template(template, element, breadcrumbs)
         elif isinstance(template, ArrayTemplate):

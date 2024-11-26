@@ -58,6 +58,11 @@ After you have produced a detailed rundown of your thought process,
 
 An example of a compliant response that you can output is:
 {get_person_action_form_filler().get_hint_filled_form()}
+
+Notice how the filled form does not match the template.
+It has the same structure, but does not contain any XML attributes.
+
+You only need to output the filled form. You don't need to output anything else.
 """
 
 
@@ -71,8 +76,7 @@ class PersonHandler:
             instructions=PERSON_INSTRUCTIONS,
         )
 
-        # code_classifier_agent.functions.append(file_contains_code)
-        # code_register_agent.functions.append(register_element)
+        # self.agent.functions.append(set_goals)
 
         self.message_traversal = MessageTreeTraversal[Message].new()
         self._reaction_filler = get_person_action_form_filler()
@@ -80,6 +84,7 @@ class PersonHandler:
     def act(self, client: Swarm) -> str:
         logging.info(f"🤔 Agent {self._entity.id} is acting 🤔")
 
+        self.message_traversal.go_to_new_child({"role": "user", "content": "Perform an action?"})
         run_inference = SwarmRunInference(client, self.agent, stream=True)
         filled_form = fill_form(
             run_inference,
@@ -90,30 +95,6 @@ class PersonHandler:
         logging.info(f"✅ Agent {self._entity.id} has acted ✅")
         form_data: dict = filled_form.form_data
         return form_data["ACTION"]
-
-        # while True:
-
-        # print(flush=True)
-        # response = process_and_print_streaming_response(response)
-        # print(flush=True)
-
-        # if (
-        #     len(response.messages) == 0
-        #     or "content" not in response.messages[-1]
-        #     or response.messages[-1]["content"] == ""
-        # ):
-        #     self.messages.extend(response.messages)
-        #     feedback = {
-        #         "role": "system",
-        #         "sender": "System",
-        #         "content": "You must produce an output response. Please try again.",
-        #     }
-        #     pretty_print_messages([feedback])
-        #     self.messages.append(feedback)
-        #     logging.info(f"❌ Failed to generate response {response=} ❌")
-        #     continue
-        #     break
-        # self.messages.extend(response.messages)
 
 
 class PeopleManager:
@@ -133,7 +114,7 @@ class PeopleManager:
     def act(self):
         for handler in self._person_handlers.values():
             handler.act(self._client)
-            self._environment.react(handler.messages)
+            self._environment.react(handler.message_traversal.node.get_message_chain())
 
     def start_person_loop(self):
         self._is_running = True

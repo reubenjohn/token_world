@@ -12,6 +12,7 @@ from token_world.llm.form_filling.form_filler import (
     FormFillingException,
 )
 from token_world.llm.message_tree import MessageTreeTraversal
+import logging
 
 FormFillingExceptions = Union[ParseError, FormFillingException]
 
@@ -26,6 +27,8 @@ class SwarmRunInference:
     stream: bool = True
 
     def __call__(self, messages: List[Message]):
+        logging.info(f"🚀 Running inference with {len(messages)} messages 🚀:")
+        logging.debug(f"Messages: {messages}")
         response = self.client.run(agent=self.agent, messages=messages, stream=self.stream)
         print(flush=True)
         if self.stream:
@@ -39,10 +42,7 @@ class SwarmRunInference:
 def get_default_feedback_message(
     form_filler: FormFiller, e: FormFillingExceptions, _: AgentResponse
 ) -> Message:
-    reminder_feedback = f"""Here is the form template again:
-{form_filler.template_text}
-
-An example of a compliant response is:
+    reminder_feedback = f"""An example of a compliant response is:
 {form_filler.get_hint_filled_form()}"""
 
     if isinstance(e, ParseError):
@@ -56,12 +56,16 @@ An example of a compliant response is:
     else:
         feedback_text = f"Error filling form: {e}"
 
+    message = f"""{feedback_text}
+
+{reminder_feedback}"""
+
+    logging.info(f"🔔 Feedback message: {message}")
+
     return {
         "role": "system",
         "sender": "System",
-        "message": f"""{feedback_text}
-
-{reminder_feedback}""",
+        "content": message,
     }
 
 
@@ -80,10 +84,12 @@ def fill_form(
 ) -> FilledForm:
     feedback: Optional[Message] = None
     starting_node = traversal.node
-    for _ in range(form_fill_retry_limit):
+    for attempt in range(1, form_fill_retry_limit + 1):
         try:
+            logging.info(f"🚀 Attempt {attempt}/{form_fill_retry_limit}: Running inference...")
             response = run_inference(traversal.node.get_message_chain())
             filled_form = _attempt_form_filling(response, traversal, form_filler)
+            logging.info(f"✅ Attempt {attempt}: Form filled successfully.")
             if keep_only_succcessful_attempt:
                 traversal.go_to_ancestor(starting_node).go_to_new_descendant(
                     filled_form.successful_response.messages
@@ -91,18 +97,20 @@ def fill_form(
             return filled_form
 
         except ParseError as e:
+            logging.error(f"❌ Attempt {attempt}: ParseError encountered: {e}")
             # Provide feedback to the agent on the error
             feedback = get_feedback_message(form_filler, e, response)
             traversal.go_to_new_child(feedback)
 
         except FormFillingException as e:
+            logging.error(f"❌ Attempt {attempt}: FormFillingException encountered: {e}")
             # Provide feedback to the agent on the error
             feedback = get_feedback_message(form_filler, e, response)
             traversal.go_to_new_child(feedback)
 
     raise FormFillingException(
         "Failed to fill the form after multiple attempts. "
-        f"Last feedback: {feedback and feedback['message']}"
+        f"Last feedback: {feedback and feedback['content']}"
     )
 
 
