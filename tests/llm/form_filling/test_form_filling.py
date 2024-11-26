@@ -52,7 +52,7 @@ def test_form_filler_with_missing_text(simple_template):
         form_filler.parse(xml_input)
 
 
-def test_form_filler_with_attributes():
+def test_form_filler_with_attributes(simple_template):
     xml_input = """
     <FORM>
         Form hint goes here...
