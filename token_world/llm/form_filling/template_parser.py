@@ -53,7 +53,10 @@ def _parse_text_template(element: ET.Element, breadcrumbs: Breadcrumbs) -> TextT
         hint=_parse_template_element_hint(element, breadcrumbs),
         min_word_count=_parse_integer_attribute(element, "minWordCount", breadcrumbs),
         max_word_count=_parse_integer_attribute(
-            element, "maxWordCount", default="100000", breadcrumbs=breadcrumbs
+            element,
+            "maxWordCount",
+            default=str(TextTemplate.MAX_WORD_COUNT),
+            breadcrumbs=breadcrumbs,
         ),
     )
 

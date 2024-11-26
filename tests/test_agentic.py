@@ -36,7 +36,9 @@ def simple_reminder():
     return """An example of a compliant response is:
 <FORM>
   Form hint goes here...
-  <TEXT>Sample hint</TEXT>
+  <TEXT>
+    Sample hint (5-10 words)
+  </TEXT>
 </FORM>"""
 
 
