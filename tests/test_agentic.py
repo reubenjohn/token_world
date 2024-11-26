@@ -5,7 +5,7 @@ from xml.etree.ElementTree import ParseError
 
 
 from token_world.llm.form_filling.form_filler import FormFiller, FormFillingException
-from token_world.llm.message_tree import MessageTree, MessageTreeTraversal
+from token_world.llm.message_tree import MessageTreeTraversal
 from token_world.llm.form_filling.agentic import (
     get_default_feedback_message,
     fill_form,
@@ -89,7 +89,7 @@ def test_fill_form_success(simple_form_filler):
     def mock_run_inference(messages: List[Message]) -> MockAgentResponse:
         return MockAgentResponse([{"content": "<FORM><TEXT>Filled content</TEXT></FORM>"}])
 
-    traversal = MessageTreeTraversal(MessageTree())
+    traversal = MessageTreeTraversal.new()
 
     filled_form = fill_form(
         run_inference=mock_run_inference,
@@ -108,7 +108,7 @@ def test_fill_form_inference_error(simple_form_filler):
     def mock_run_inference(messages: List[Dict[str, Any]]) -> MockAgentResponse:
         raise RuntimeError("Inference exception")
 
-    traversal = MessageTreeTraversal(MessageTree())
+    traversal = MessageTreeTraversal.new()
 
     with pytest.raises(RuntimeError, match="Inference exception"):
         fill_form(
@@ -132,7 +132,7 @@ def test_fill_form_invalid_xml(simple_form_filler):
             ]
         )
 
-    traversal = MessageTreeTraversal(MessageTree())
+    traversal = MessageTreeTraversal.new()
 
     with pytest.raises(
         FormFillingException,
@@ -151,7 +151,7 @@ def test_fill_form_invalid_template(simple_form_filler):
     def mock_run_inference(messages: List[Dict[str, Any]]) -> MockAgentResponse:
         return MockAgentResponse([{"content": "<FORM><TEXT1>Invalid content</TEXT1></FORM>"}])
 
-    traversal = MessageTreeTraversal(MessageTree())
+    traversal = MessageTreeTraversal.new()
 
     with pytest.raises(
         FormFillingException,

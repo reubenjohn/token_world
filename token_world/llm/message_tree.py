@@ -56,9 +56,13 @@ class MessageTreeTraversal(Generic[Message]):
     tree: MessageTree[Message]
     node: MessageNode[Message]
 
-    def __init__(self, tree: MessageTree[Message]):
-        self.tree = tree
-        self.node = tree.root
+    @staticmethod
+    def new(
+        tree: Optional[MessageTree[Message]] = None, node: Optional[MessageNode[Message]] = None
+    ) -> "MessageTreeTraversal[Message]":
+        tree = tree if tree is not None else MessageTree[Message]()
+        node = node if node is not None else tree.root
+        return MessageTreeTraversal[Message](tree, node)
 
     def go_to_new_child(self, message: Message) -> "MessageTreeTraversal[Message]":
         self.node = self.node.add_child(message)

@@ -125,7 +125,7 @@ def test_message_node_get_message_chain():
 
 def test_message_tree_traversal_go_to_new_child():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
     assert traversal.go_to_new_child("child_message") is traversal
     assert traversal.node is tree.root.children[0]
     assert traversal.go_to_new_child("grandchild_message") is traversal
@@ -134,7 +134,7 @@ def test_message_tree_traversal_go_to_new_child():
 
 def test_message_tree_traversal_go_to_new_descendant():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
 
     # Test going to a new descendant
     descendant_chain = ["child_message", "grandchild_message", "great_grandchild_message"]
@@ -165,7 +165,7 @@ def test_message_tree_traversal_go_to_new_descendant():
 
 def test_message_tree_traversal_go_to_parent():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
     assert traversal.go_to_new_child("child_message") is traversal
     assert traversal.go_to_parent() is traversal
     assert traversal.node is tree.root
@@ -173,7 +173,7 @@ def test_message_tree_traversal_go_to_parent():
 
 def test_message_tree_traversal_go_to_child():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
     assert traversal.go_to_new_child("child_message") is traversal
     with pytest.raises(IndexError):
         traversal.go_to_child(0)
@@ -186,7 +186,7 @@ def test_message_tree_traversal_go_to_child():
 
 def test_message_tree_traversal_go_to_root():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
     assert traversal.go_to_new_child("child_message") is traversal
     assert traversal.go_to_new_child("grandchild_message") is traversal
     assert traversal.go_to_root() is traversal
@@ -197,7 +197,7 @@ def test_message_tree_traversal_go_to_root():
 
 def test_message_tree_traversal_get_current_message():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
     with pytest.raises(ValueError, match="Root node has no message"):
         _ = traversal.get_current_message()
     assert traversal.go_to_new_child("child_message") is traversal
@@ -206,7 +206,7 @@ def test_message_tree_traversal_get_current_message():
 
 def test_message_tree_traversal_go_to_ancestor():
     tree = MessageTreeStr()
-    traversal = MessageTreeTraversalStr(tree)
+    traversal = MessageTreeTraversalStr.new(tree)
 
     # Create a tree structure
     traversal.go_to_new_child("child_message")
