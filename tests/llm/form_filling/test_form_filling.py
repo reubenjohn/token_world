@@ -3,59 +3,67 @@ import pytest
 from token_world.llm.form_filling.form_filler import FormFiller, FormFillingException
 
 
-def test_form_filler_with_valid_text_template():
-    template = """
+@pytest.fixture
+def simple_template():
+    return """
     <FORM>
         Form hint goes here...
         <TEXT minWordCount="5" maxWordCount="10">Sample hint</TEXT>
     </FORM>
     """
+
+
+def test_form_filler_with_valid_text_template(simple_template):
     xml_input = """
     <FORM>
         Form hint goes here...
         <TEXT>Sample text</TEXT>
     </FORM>
     """
-    form_filler = FormFiller(template)
+    form_filler = FormFiller(simple_template)
     result = form_filler.parse(xml_input)
     assert result == {"TEXT": "Sample text"}
 
 
-def test_form_filler_with_invalid_root_tag():
-    template = """
-    <FORM>
-        Form hint goes here...
-        <TEXT minWordCount="5" maxWordCount="10">Sample hint</TEXT>
-    </FORM>
-    """
+def test_form_filler_with_invalid_root_tag(simple_template):
     xml_input = """
     <INVALID>
         <TEXT>Sample text</TEXT>
     </INVALID>
     """
-    form_filler = FormFiller(template)
+    form_filler = FormFiller(simple_template)
     with pytest.raises(
         FormFillingException, match="DictionaryTemplate 'FORM': expected but found 'INVALID'"
     ):
         form_filler.parse(xml_input)
 
 
-def test_form_filler_with_missing_text():
-    template = """
-    <FORM>
-        Form hint goes here...
-        <TEXT minWordCount="5" maxWordCount="10">Sample hint</TEXT>
-    </FORM>
-    """
+def test_form_filler_with_missing_text(simple_template):
     xml_input = """
     <FORM>
         Form hint goes here...
         <TEXT></TEXT>
     </FORM>
     """
-    form_filler = FormFiller(template)
+    form_filler = FormFiller(simple_template)
     with pytest.raises(
         FormFillingException, match="TextTemplate 'FORM/TEXT': Element 'TEXT' must have text"
+    ):
+        form_filler.parse(xml_input)
+
+
+def test_form_filler_with_attributes(simple_template):
+    xml_input = """
+    <FORM>
+        Form hint goes here...
+        <TEXT attribute="value">Sample text</TEXT>
+    </FORM>
+    """
+    form_filler = FormFiller(simple_template)
+    with pytest.raises(
+        FormFillingException,
+        match="Filled forms must not have attributes. "
+        "From 'FORM/TEXT', remove attributes 'attribute=\"value\"' and try again.",
     ):
         form_filler.parse(xml_input)
 

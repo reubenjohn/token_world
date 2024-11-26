@@ -51,8 +51,9 @@ class FormFiller:
             )
         if element.attrib != {}:
             raise FormFillingException(
-                f"Element '{breadcrumbs}': Must not have attributes. "
-                f"Remove {self._attrib_text(element)} and try again."
+                f"Filled forms must not have attributes. "
+                f"From '{breadcrumbs}', remove attributes '{self._attrib_text(element)}' "
+                "and try again."
             )
         if isinstance(template, TextTemplate):
             return self._parse_text_template(template, element, breadcrumbs)
