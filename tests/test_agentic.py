@@ -165,3 +165,67 @@ def test_fill_form_invalid_template(simple_form_filler):
             form_filler=simple_form_filler,
             form_fill_retry_limit=3,
         )
+
+
+def test_fill_form_retry_attempts(simple_form_filler):
+    def mock_run_inference(messages: List[Message]) -> MockAgentResponse:
+        if len(messages) == 0:
+            return MockAgentResponse([{"content": "<FORM>First attempt</FORM>"}])
+        else:
+            return MockAgentResponse([{"content": "<FORM><TEXT>Second attempt</TEXT></FORM>"}])
+
+    traversal = MessageTreeTraversal.new()
+
+    with pytest.raises(
+        FormFillingException,
+        match="Failed to fill the form after multiple attempts.",
+    ):
+        fill_form(
+            run_inference=mock_run_inference,
+            traversal=traversal,
+            form_filler=simple_form_filler,
+            form_fill_retry_limit=1,
+            keep_only_succcessful_attempt=False,
+        )
+
+    traversal = MessageTreeTraversal.new()
+
+    filled_form = fill_form(
+        run_inference=mock_run_inference,
+        traversal=traversal,
+        form_filler=simple_form_filler,
+        form_fill_retry_limit=2,
+        keep_only_succcessful_attempt=True,
+    )
+
+    assert filled_form.form_data == {"TEXT": "Second attempt"}
+    assert filled_form.successful_response == MockAgentResponse(
+        [{"content": "<FORM><TEXT>Second attempt</TEXT></FORM>"}]
+    )
+
+    # Ensure that both attempts are in the tree
+    assert traversal.node.message["content"] == "<FORM><TEXT>Second attempt</TEXT></FORM>"
+    assert len(traversal.go_to_root().node.children) == 2
+    assert traversal.node.children[0].message["content"] == "<FORM>First attempt</FORM>"
+    assert (
+        traversal.node.children[1].message["content"] == "<FORM><TEXT>Second attempt</TEXT></FORM>"
+    )
+
+    traversal = MessageTreeTraversal.new()
+    filled_form = fill_form(
+        run_inference=mock_run_inference,
+        traversal=traversal,
+        form_filler=simple_form_filler,
+        form_fill_retry_limit=2,
+        keep_only_succcessful_attempt=False,
+    )
+
+    assert filled_form.form_data == {"TEXT": "Second attempt"}
+    assert filled_form.successful_response == MockAgentResponse(
+        [{"content": "<FORM><TEXT>Second attempt</TEXT></FORM>"}]
+    )
+
+    # Ensure that both attempts are in the tree
+    assert traversal.node.message["content"] == "<FORM><TEXT>Second attempt</TEXT></FORM>"
+    assert len(traversal.go_to_root().node.children) == 1
+    assert traversal.node.children[0].message["content"] == "<FORM>First attempt</FORM>"

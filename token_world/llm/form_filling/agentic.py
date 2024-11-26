@@ -1,31 +1,39 @@
-from typing import Any, Callable, Dict, List, NamedTuple, Optional, Union
+from typing import Callable, List, NamedTuple, Optional, Union
 from xml.etree.ElementTree import ParseError
+from attr import dataclass
 from swarm import Swarm, Agent  # type: ignore[import]
 from swarm.repl.repl import (  # type: ignore[import]
     process_and_print_streaming_response,
 )
-from token_world.llm.form_filling.form_filler import FilledElement, FormFiller, FormFillingException
+from token_world.llm.llm import Message, AgentResponse
+from token_world.llm.form_filling.form_filler import (
+    FilledDictionary,
+    FormFiller,
+    FormFillingException,
+)
 from token_world.llm.message_tree import MessageTreeTraversal
 
-Message = Dict[str, Any]
-AgentResponse = Any
 FormFillingExceptions = Union[ParseError, FormFillingException]
 
 RunInference = Callable[[List[Message]], AgentResponse]
 GetFeedback = Callable[[FormFiller, FormFillingExceptions, AgentResponse], Message]
 
 
-def swarm_inference_fn(
-    client: Swarm, agent: Agent, messages: List[Message], stream: bool = True
-) -> AgentResponse:
-    response = client.run(agent=agent, messages=messages, stream=stream)
-    print(flush=True)
-    if stream:
-        response = process_and_print_streaming_response(response)
-    else:
-        print(response)
-    print(flush=True)
-    return response
+@dataclass
+class SwarmRunInference:
+    client: Swarm
+    agent: Agent
+    stream: bool = True
+
+    def __call__(self, messages: List[Message]):
+        response = self.client.run(agent=self.agent, messages=messages, stream=self.stream)
+        print(flush=True)
+        if self.stream:
+            response = process_and_print_streaming_response(response)
+        else:
+            print(response)
+        print(flush=True)
+        return response
 
 
 def get_default_feedback_message(
@@ -58,7 +66,7 @@ An example of a compliant response is:
 
 
 class FilledForm(NamedTuple):
-    form_data: FilledElement
+    form_data: FilledDictionary
     successful_response: AgentResponse
 
 
@@ -106,4 +114,7 @@ def _attempt_form_filling(
     traversal.go_to_new_descendant(response.messages)
 
     # Attempt to parse the filled form
-    return FilledForm(form_filler.parse(traversal.get_current_message()["content"]), response)
+    parsed_form = form_filler.parse(traversal.get_current_message()["content"])
+    if not isinstance(parsed_form, dict):
+        raise TypeError(f"Expected FilledDictionary, got {type(parsed_form).__name__}")
+    return FilledForm(parsed_form, response)
