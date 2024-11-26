@@ -1,0 +1,17 @@
+<FORM>
+    A form representing an agents response to the environment.
+    <THOUGHTS minWordCount="50" maxWordCount="500">
+    Enter your internal thought process here...
+    </THOUGHTS>
+
+    <GOALS isArray="true">
+        You may enter a variable number of goals here...:
+        <GOAL minWordCount="50" maxWordCount="100">Your goal 1</GOAL>
+        <GOAL minWordCount="50" maxWordCount="100">Your goal 2</GOAL>
+        <GOAL minWordCount="50" maxWordCount="100">Your goal n</GOAL>
+    </GOALS>
+
+    <ACTION minWordCount="10" maxWordCount="100">
+    A single (concise) action to perform in textual form...
+    </ACTION>
+</FORM>
