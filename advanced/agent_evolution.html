@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Agent Evolution - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Agent Evolution";
+        var mkdocs_page_input_path = "advanced/agent_evolution.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Agent Evolution</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#key-mechanisms-of-agent-evolution">Key Mechanisms of Agent Evolution</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How It Works</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-experience-tracking">1. Experience Tracking</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-learning-mechanisms">2. Learning Mechanisms</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-personality-evolution">3. Personality Evolution</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-evolution-in-action">Example: Evolution in Action</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#initial-state">Initial State</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#interaction">Interaction</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#outcome">Outcome</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#experimentation-ideas">Experimentation Ideas</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Advanced Topics</li>
+      <li class="breadcrumb-item active">Agent Evolution</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="agent-evolution">Agent Evolution<a class="headerlink" href="#agent-evolution" title="Permanent link">&para;</a></h1>
+<p>Token World supports dynamic agent evolution, allowing agents to adapt, learn, and develop new goals and behaviors over time. This feature enhances the realism and depth of simulations, enabling the study of emergent behaviors and long-term interactions.</p>
+<hr />
+<blockquote>
+<p>Notes: Update the below documentation to focus on just goals and agent memory where other mechanics (relationship development, behavioral adaptation, etc) emerge from these two fundamental mechanics.</p>
+</blockquote>
+<h2 id="key-mechanisms-of-agent-evolution">Key Mechanisms of Agent Evolution<a class="headerlink" href="#key-mechanisms-of-agent-evolution" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Dynamic Goal Adjustment</strong>  </li>
+<li>Agents can modify their goals based on their interactions and environment changes.  </li>
+<li>
+<p>Example:</p>
+<ul>
+<li>Initial Goal: <em>"Harvest apples."</em></li>
+<li>New Goal (post-interaction): <em>"Trade apples for coins."</em></li>
+</ul>
+</li>
+<li>
+<p><strong>Relationship Development</strong>  </p>
+</li>
+<li>Agents track relationships with other agents, which influence future interactions.  </li>
+<li>
+<p>Example:</p>
+<ul>
+<li>Positive Interaction: Builds trust for collaboration.</li>
+<li>Negative Interaction: Leads to competition or conflict.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trait and Ability Growth</strong>  </p>
+</li>
+<li>Agents can improve their traits or gain new abilities over time.  </li>
+<li>
+<p>Example:</p>
+<ul>
+<li>A farmer agent gains the "plowing" ability after using a plow multiple times.</li>
+</ul>
+</li>
+<li>
+<p><strong>Behavioral Adaptation</strong>  </p>
+</li>
+<li>Agents adapt their strategies based on the success or failure of past actions.  </li>
+<li>Example:<ul>
+<li>An explorer avoids dangerous areas after a failed exploration attempt.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<h3 id="1-experience-tracking">1. Experience Tracking<a class="headerlink" href="#1-experience-tracking" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Agents maintain an internal record of:</li>
+<li>Completed actions.</li>
+<li>Interaction outcomes.</li>
+<li>Changes in the environment.</li>
+</ul>
+<h3 id="2-learning-mechanisms">2. Learning Mechanisms<a class="headerlink" href="#2-learning-mechanisms" title="Permanent link">&para;</a></h3>
+<ul>
+<li>~~<strong>Reinforcement Learning</strong>: Agents prioritize actions that yield positive results.~~</li>
+<li><strong>Feedback Integration</strong>: Feedback from failed actions helps refine future decisions.</li>
+</ul>
+<h3 id="3-personality-evolution">3. Personality Evolution<a class="headerlink" href="#3-personality-evolution" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Agents’ personalities evolve through repeated interactions.</li>
+<li>Example:</li>
+<li>A "curious" agent becomes "cautious" after encountering multiple dangers.</li>
+</ul>
+<hr />
+<h2 id="example-evolution-in-action">Example: Evolution in Action<a class="headerlink" href="#example-evolution-in-action" title="Permanent link">&para;</a></h2>
+<h3 id="initial-state">Initial State<a class="headerlink" href="#initial-state" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Agent</strong>: Alice, a farmer with basic farming skills.</li>
+<li><strong>Goal</strong>: Harvest apples.</li>
+</ul>
+<h3 id="interaction">Interaction<a class="headerlink" href="#interaction" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Alice completes multiple harvesting actions, gaining experience.</li>
+<li>The environment introduces a new mechanic: trading resources.</li>
+<li>Alice adjusts her goal to trade apples for tools.</li>
+</ol>
+<h3 id="outcome">Outcome<a class="headerlink" href="#outcome" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>New Trait</strong>: Alice gains a "trading" ability.</li>
+<li><strong>Behavior Change</strong>: Alice prioritizes trade over farming when tools are low.</li>
+</ul>
+<hr />
+<h2 id="experimentation-ideas">Experimentation Ideas<a class="headerlink" href="#experimentation-ideas" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Long-Term Scenarios</strong>: Observe how agents evolve over hundreds of time steps.</li>
+<li><strong>Competitive Dynamics</strong>: Study evolution in competitive environments with scarce resources.</li>
+<li><strong>Collaborative Growth</strong>: Explore how relationships impact group evolution.</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="scalability.html" class="btn btn-neutral float-left" title="Scalability"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="integrating_models.html" class="btn btn-neutral float-right" title="Integrating New Models">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="scalability.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="integrating_models.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

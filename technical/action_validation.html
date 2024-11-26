@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Action Validation - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Action Validation";
+        var mkdocs_page_input_path = "technical/action_validation.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Action Validation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#workflow-action-validation">Workflow: Action Validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#precondition-and-effect-examples">Precondition and Effect Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#example-1-eating-an-apple">Example 1: Eating an Apple</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-2-building-a-shelter">Example 2: Building a Shelter</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dynamic-mechanic-generation">Dynamic Mechanic Generation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#failed-preconditions">Failed Preconditions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#invalid-actions">Invalid Actions</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extending-action-validation">Extending Action Validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Technical Details</li>
+      <li class="breadcrumb-item active">Action Validation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="action-validation">Action Validation<a class="headerlink" href="#action-validation" title="Permanent link">&para;</a></h1>
+<p>Action validation is a critical component of Token World, ensuring that agent actions are grounded, logical, and impactful. This section dives into how the framework processes, validates, and executes actions generated by agents.</p>
+<hr />
+<h2 id="workflow-action-validation">Workflow: Action Validation<a class="headerlink" href="#workflow-action-validation" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Action Generation</strong>  </li>
+<li>Agents generate natural language actions based on their goals and the environment.  </li>
+<li>
+<p>Example: <em>"Harvest apples from the tree."</em></p>
+</li>
+<li>
+<p><strong>Precondition Check</strong>  </p>
+</li>
+<li>The environment validates whether the action is feasible by checking preconditions against the relevant entities.  </li>
+<li>
+<p>Example:</p>
+<ul>
+<li>The tree must have apples available.</li>
+<li>The agent must possess a tool if required.</li>
+</ul>
+</li>
+<li>
+<p><strong>Effect Application</strong>  </p>
+</li>
+<li>If preconditions are met, the environment applies the action’s effects, updating the states of entities and agents.  </li>
+<li>
+<p>Example:</p>
+<ul>
+<li>Apples are removed from the tree.</li>
+<li>The agent’s inventory is updated to include apples.</li>
+</ul>
+</li>
+<li>
+<p><strong>Logging and Feedback</strong>  </p>
+</li>
+<li>The result of the action (success or failure) is logged.</li>
+<li>If the action fails, feedback is provided to help agents adjust their goals.</li>
+</ol>
+<hr />
+<h2 id="precondition-and-effect-examples">Precondition and Effect Examples<a class="headerlink" href="#precondition-and-effect-examples" title="Permanent link">&para;</a></h2>
+<h3 id="example-1-eating-an-apple">Example 1: Eating an Apple<a class="headerlink" href="#example-1-eating-an-apple" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Preconditions</strong>:</li>
+<li>The agent must have an "isPerson" property.</li>
+<li>The entity (apple) must have an "isEdible" property.</li>
+<li><strong>Effects</strong>:</li>
+<li>The entity is removed from the environment.</li>
+<li>The agent’s hunger is reduced by the apple’s calorie value.</li>
+</ul>
+<h3 id="example-2-building-a-shelter">Example 2: Building a Shelter<a class="headerlink" href="#example-2-building-a-shelter" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Preconditions</strong>:</li>
+<li>The agent must have "isBuilder" as a property.</li>
+<li>The environment must have enough "Wood" and "Stone" resources.</li>
+<li><strong>Effects</strong>:</li>
+<li>Resources are consumed.</li>
+<li>A new entity ("Shelter") is added to the environment.</li>
+</ul>
+<hr />
+<h2 id="dynamic-mechanic-generation">Dynamic Mechanic Generation<a class="headerlink" href="#dynamic-mechanic-generation" title="Permanent link">&para;</a></h2>
+<p>Token World dynamically generates new mechanics when agents perform novel actions.<br />
+Example:
+- <strong>Action</strong>: "Explore the forest."
+- <strong>Preconditions</strong>: Forest entity must exist, and the agent must have a "curiosity" trait.
+- <strong>Effects</strong>:
+  - New resources (e.g., trees) are discovered with wood properties.</p>
+<hr />
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<h3 id="failed-preconditions">Failed Preconditions<a class="headerlink" href="#failed-preconditions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Scenario</strong>: Agent attempts to eat an apple, but the apple is not available.  </li>
+<li><strong>Response</strong>: Log the failure and provide feedback to the agent, such as <em>"Apple not found."</em></li>
+</ul>
+<h3 id="invalid-actions">Invalid Actions<a class="headerlink" href="#invalid-actions" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Scenario</strong>: Agent tries to "fly," but no flying mechanic exists.  </li>
+<li><strong>Response</strong>: The action is rejected, and feedback is provided: <em>"Action unsupported."</em></li>
+</ul>
+<hr />
+<h2 id="extending-action-validation">Extending Action Validation<a class="headerlink" href="#extending-action-validation" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Adding New Actions</strong>  </li>
+<li>
+<p>Define preconditions and effects for new actions in the <code>actions</code> module.</p>
+</li>
+<li>
+<p><strong>Custom Grounding Logic</strong>  </p>
+</li>
+<li>
+<p>Extend the <code>grounding</code> module to introduce new validation mechanisms.</p>
+</li>
+<li>
+<p><strong>Action-Specific Rules</strong>  </p>
+</li>
+<li>Add scenario-specific rules in the <code>config/rules.json</code> file.</li>
+</ol>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>For more details, explore:<br />
+- <a href="environment.html">Environment Design</a><br />
+- <a href="sub_agents.html">Sub-Agent Delegation</a>  </p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="architecture.html" class="btn btn-neutral float-left" title="Architecture"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="environment.html" class="btn btn-neutral float-right" title="Environment Design">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="architecture.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="environment.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

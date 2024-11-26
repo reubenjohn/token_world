@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Customization - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Customization";
+        var mkdocs_page_input_path = "usage/customization.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Customization</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#customizing-agents">Customizing Agents</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#adding-a-new-agent">Adding a New Agent</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#customizing-entities">Customizing Entities</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#adding-a-new-entity">Adding a New Entity</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#customizing-global-settings">Customizing Global Settings</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#editing-global-settings">Editing Global Settings</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extending-functionality">Extending Functionality</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+      <li class="breadcrumb-item active">Customization</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="customization-guide">Customization Guide<a class="headerlink" href="#customization-guide" title="Permanent link">&para;</a></h1>
+<p>Token World is designed to be highly flexible, allowing you to create unique simulations tailored to your needs. This guide explains how to customize agents, entities, and global settings to build your ideal simulation.</p>
+<hr />
+<blockquote>
+<p><strong>WARNING: The below steps are for illustrative purposes only and not meant to serve as actual instructions</strong></p>
+</blockquote>
+<h2 id="customizing-agents">Customizing Agents<a class="headerlink" href="#customizing-agents" title="Permanent link">&para;</a></h2>
+<p>Agents are the core of Token World, driving interactions within the environment. You can define agents in the configuration file.</p>
+<h3 id="adding-a-new-agent">Adding a New Agent<a class="headerlink" href="#adding-a-new-agent" title="Permanent link">&para;</a></h3>
+<p>To add a new agent, ask the environment agent. Each agent requires:
+- <strong>Name</strong>: A unique identifier for the agent.
+- <strong>Role</strong>: The agent’s role in the simulation.
+- <strong>Personality</strong>: A prompt describing the agent's behavior and goals.</p>
+<hr />
+<h2 id="customizing-entities">Customizing Entities<a class="headerlink" href="#customizing-entities" title="Permanent link">&para;</a></h2>
+<p>Entities are objects in the environment that agents interact with. You can define entities with properties that govern their behavior.</p>
+<h3 id="adding-a-new-entity">Adding a New Entity<a class="headerlink" href="#adding-a-new-entity" title="Permanent link">&para;</a></h3>
+<p>To add entities, ask the environment agent. Each entity requires:
+- <strong>Name</strong>: A unique identifier.
+- <strong>Properties</strong>: Key-value pairs defining its attributes.</p>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Apple&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;isEdible&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;calories&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Tree&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;canGrowFruit&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2 id="customizing-global-settings">Customizing Global Settings<a class="headerlink" href="#customizing-global-settings" title="Permanent link">&para;</a></h2>
+<p>Global settings define the overall simulation parameters, such as:
+- <strong>Time Steps</strong>: Number of iterations for the simulation.
+- <strong>Logging Level</strong>: Verbosity of simulation output.
+- <strong>Debug Mode</strong>: Whether debugging tools are active.</p>
+<h3 id="editing-global-settings">Editing Global Settings<a class="headerlink" href="#editing-global-settings" title="Permanent link">&para;</a></h3>
+<p>Modify the <code>&lt;missing documentation&gt;</code> file to adjust these parameters. Example:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">&quot;settings&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;timeSteps&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;loggingLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;debugMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h2 id="extending-functionality">Extending Functionality<a class="headerlink" href="#extending-functionality" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>WARNING: The below steps are for illustrative purposes only and not meant to serve as actual instructions</strong>
+For advanced customization, you can:
+1. Add new actions or behaviors in the <code>src/actions</code> folder.
+2. Define new grounding mechanisms in the <code>src/grounding</code> module.
+3. Create new debugging features in the <code>web/</code> directory.</p>
+</blockquote>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Once you've customized your agents and entities, explore the <a href="examples/small_town.html">Examples</a> section to see how these customizations can bring your scenarios to life!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../getting_started/quick_start.html" class="btn btn-neutral float-left" title="Quick Start Guide"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="examples/small_town.html" class="btn btn-neutral float-right" title="Small Town Simulation">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../getting_started/quick_start.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="examples/small_town.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

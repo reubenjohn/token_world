@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Small Town Simulation - Token World</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Small Town Simulation";
+        var mkdocs_page_input_path = "usage/examples/small_town.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" >Examples</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Small Town Simulation</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#scenario-overview">Scenario Overview</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#agents">Agents</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#running-the-simulation">Running the Simulation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-interactions">Example Interactions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#experimentation-ideas">Experimentation Ideas</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../technical/architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../technical/action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../technical/environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../technical/sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Usage</li>
+          <li class="breadcrumb-item">Examples</li>
+      <li class="breadcrumb-item active">Small Town Simulation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="example-small-town-simulation">Example: Small Town Simulation<a class="headerlink" href="#example-small-town-simulation" title="Permanent link">&para;</a></h1>
+<p>This example demonstrates how to set up and run a small-town simulation in Token World. The scenario involves a community of agents interacting with each other and their environment, creating emergent behaviors over time.</p>
+<hr />
+<blockquote>
+<p><strong>WARNING: The below steps are for illustrative purposes only and not meant to serve as actual instructions</strong></p>
+</blockquote>
+<h2 id="scenario-overview">Scenario Overview<a class="headerlink" href="#scenario-overview" title="Permanent link">&para;</a></h2>
+<p>The small town includes:
+- <strong>Agents</strong>: A mix of professions, each with distinct roles and personalities.
+- <strong>Entities</strong>: Objects and features in the town, such as food items, tools, and buildings.
+- <strong>Interactions</strong>: Agents perform tasks like trading, farming, or exploring, dynamically changing the environment.</p>
+<hr />
+<h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
+<p>Below is the configuration for a small-town simulation:</p>
+<h3 id="agents">Agents<a class="headerlink" href="#agents" title="Permanent link">&para;</a></h3>
+<p>Define the town's residents:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Farmer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;personality&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Curious and resourceful. Enjoys growing crops and helping others.&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bob&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Merchant&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;personality&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Clever and opportunistic. Seeks opportunities for trade and negotiation.&quot;</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Eve&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;role&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Explorer&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;personality&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Adventurous and brave. Likes to discover new areas and gather resources.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<h3 id="entities">Entities<a class="headerlink" href="#entities" title="Permanent link">&para;</a></h3>
+<p>Define the resources available in the town:</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">&quot;entities&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Apple&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;isEdible&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;calories&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">50</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Plow&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;isTool&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;durability&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Field&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;properties&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;canGrowCrops&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</code></pre></div>
+
+<hr />
+<h2 id="running-the-simulation">Running the Simulation<a class="headerlink" href="#running-the-simulation" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Use the provided configuration files (<code>scenario.json</code> and <code>entities.json</code>).</li>
+<li>Start the simulation:
+   <code>bash
+   python run_simulation.py</code></li>
+<li>Observe agent actions and state changes in real time.</li>
+</ol>
+<hr />
+<h2 id="example-interactions">Example Interactions<a class="headerlink" href="#example-interactions" title="Permanent link">&para;</a></h2>
+<p>As the simulation progresses, you might see logs like:</p>
+<div class="codehilite"><pre><span></span><code>[Agent: Alice] Action: &quot;Plant crops in the field.&quot;
+[Environment] Preconditions met. Action executed.
+[Entity: Field] Crops planted. Growth started.
+
+[Agent: Bob] Action: &quot;Trade apples with Alice.&quot;
+[Environment] Preconditions met. Trade executed.
+[Agent: Alice] Received coins.
+[Agent: Bob] Received apples.
+
+[Agent: Eve] Action: &quot;Explore the forest.&quot;
+[Environment] Preconditions met. New area discovered. Resources added: [Wood].
+</code></pre></div>
+
+<hr />
+<h2 id="experimentation-ideas">Experimentation Ideas<a class="headerlink" href="#experimentation-ideas" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Add More Agents</strong>: Introduce new roles like a blacksmith or healer.</li>
+<li><strong>Modify Entities</strong>: Add new tools or resources, such as gold or wheat.</li>
+<li><strong>Tune Personalities</strong>: Change agents’ personalities to see how their behaviors evolve.</li>
+</ol>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Expand this small-town simulation or try a different scenario, like a <a href="role_playing.html">Role-Playing Game</a>, to explore Token World's full potential!</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../customization.html" class="btn btn-neutral float-left" title="Customization"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="role_playing.html" class="btn btn-neutral float-right" title="Role-Playing Game">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../customization.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="role_playing.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

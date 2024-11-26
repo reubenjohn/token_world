@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Quick Start Guide - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quick Start Guide";
+        var mkdocs_page_input_path = "getting_started/quick_start.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Quick Start Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#step-1-prepare-the-environment">Step 1: Prepare the Environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-2-launch-the-simulation">Step 2: Launch the Simulation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-3-observe-the-output">Step 3: Observe the Output</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-4-customize-your-simulation">Step 4: Customize Your Simulation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-5-visualize-interactions">Step 5: Visualize Interactions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#step-6-experiment-and-iterate">Step 6: Experiment and Iterate</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../technical/sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Getting Started</li>
+      <li class="breadcrumb-item active">Quick Start Guide</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="quick-start-guide">Quick Start Guide<a class="headerlink" href="#quick-start-guide" title="Permanent link">&para;</a></h1>
+<p>This guide will walk you through running your first simulation in <strong>Token World</strong>. Follow these steps to set up a basic environment, initialize agents, and observe interactions.</p>
+<hr />
+<blockquote>
+<p><strong>WARNING: The below steps are for illustrative purposes only and not meant to serve as actual instructions</strong></p>
+</blockquote>
+<h2 id="step-1-prepare-the-environment">Step 1: Prepare the Environment<a class="headerlink" href="#step-1-prepare-the-environment" title="Permanent link">&para;</a></h2>
+<p>Ensure that Token World is properly installed on your system. If you haven’t set it up yet, refer to the <a href="installation.html">Installation Guide</a>.</p>
+<hr />
+<h2 id="step-2-launch-the-simulation">Step 2: Launch the Simulation<a class="headerlink" href="#step-2-launch-the-simulation" title="Permanent link">&para;</a></h2>
+<p>Run the following command to start a pre-configured simulation:</p>
+<div class="codehilite"><pre><span></span><code>&lt;Missing<span class="w"> </span>documentation&gt;
+</code></pre></div>
+
+<p>This will initialize a small-town scenario with a few agents and entities interacting in a dynamic environment.</p>
+<hr />
+<h2 id="step-3-observe-the-output">Step 3: Observe the Output<a class="headerlink" href="#step-3-observe-the-output" title="Permanent link">&para;</a></h2>
+<p>As the simulation runs, you’ll see logs showing:
+- <strong>Agent Actions</strong>: What actions each agent is performing.
+- <strong>State Changes</strong>: Updates to entities based on agent interactions.
+- <strong>New Mechanics</strong>: Dynamically generated mechanics triggered by agent behaviors.</p>
+<p>Example:</p>
+<div class="codehilite"><pre><span></span><code>&lt;Missing documentation&gt;
+[Agent: Alice] Action: &quot;Eat apple.&quot;
+[Environment] Preconditions met. Action executed.
+[Entity: Apple] Removed from environment.
+[Agent: Alice] Hunger reduced by 20 points.
+</code></pre></div>
+
+<hr />
+<h2 id="step-4-customize-your-simulation">Step 4: Customize Your Simulation<a class="headerlink" href="#step-4-customize-your-simulation" title="Permanent link">&para;</a></h2>
+<p>Interact with the master environment agent to customize your simulation. For example:
+- Add new agents with unique personality prompts.
+- Define new entities with specific properties.
+- Set global simulation parameters like time steps or logging verbosity. (Not implemented yet)</p>
+<hr />
+<h2 id="step-5-visualize-interactions">Step 5: Visualize Interactions<a class="headerlink" href="#step-5-visualize-interactions" title="Permanent link">&para;</a></h2>
+<p>Start the web-based debugging tool to observe agent interactions in real time:</p>
+<div class="codehilite"><pre><span></span><code>&lt;Missing<span class="w"> </span>documentation&gt;
+</code></pre></div>
+
+<p>Access the tool in your browser at:</p>
+<div class="codehilite"><pre><span></span><code>http://localhost:5000
+</code></pre></div>
+
+<hr />
+<h2 id="step-6-experiment-and-iterate">Step 6: Experiment and Iterate<a class="headerlink" href="#step-6-experiment-and-iterate" title="Permanent link">&para;</a></h2>
+<p>Token World is designed for exploration. Experiment with:
+- Adding complex scenarios.
+- Creating new mechanics.
+- Tuning agent behaviors.</p>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Once you’re comfortable with the basics, explore the <a href="../usage/examples/small_town.html">Examples</a> section to dive into more advanced simulations and use cases.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../usage/customization.html" class="btn btn-neutral float-right" title="Customization">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="installation.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../usage/customization.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

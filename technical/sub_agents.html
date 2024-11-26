@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Sub-Agent Delegation - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Sub-Agent Delegation";
+        var mkdocs_page_input_path = "technical/sub_agents.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Sub-Agent Delegation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-are-sub-environments">What Are Sub-environments?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workflow-sub-environment-delegation">Workflow: Sub-environment Delegation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#types-of-sub-environments">Types of Sub-environments</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-navigation-sub-environment">1. Navigation Sub-environment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-crafting-sub-environment">2. Crafting Sub-environment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-trading-sub-environment">3. Trading Sub-environment</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-combat-sub-environment">4. Combat Sub-environment</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#use-cases-for-sub-environments">Use Cases for Sub-environments</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Technical Details</li>
+      <li class="breadcrumb-item active">Sub-Agent Delegation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="sub-environment-delegation">Sub-environment Delegation<a class="headerlink" href="#sub-environment-delegation" title="Permanent link">&para;</a></h1>
+<p>Token World employs specialized sub-environments to handle specific types of actions, ensuring that complex interactions are processed efficiently and logically. This section details how sub-environment delegation works, the types of sub-environments available, and how you can extend or customize them.</p>
+<hr />
+<h2 id="what-are-sub-environments">What Are Sub-environments?<a class="headerlink" href="#what-are-sub-environments" title="Permanent link">&para;</a></h2>
+<p>Sub-environments are specialized modules designed to:
+1. Process specific categories of actions (e.g., navigation, crafting, trading).
+2. Ensure efficient handling of tasks by delegating responsibilities.
+3. Provide fallback mechanisms for unsupported or failed actions.</p>
+<hr />
+<h2 id="workflow-sub-environment-delegation">Workflow: Sub-environment Delegation<a class="headerlink" href="#workflow-sub-environment-delegation" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Action Identification</strong>  </li>
+<li>An agent generates an action (e.g., <em>"Trade apples with Bob."</em>).</li>
+<li>
+<p>The environment identifies the action type and delegates it to the appropriate sub-environment.</p>
+</li>
+<li>
+<p><strong>Sub-environment Processing</strong>  </p>
+</li>
+<li>The sub-environment validates the action’s feasibility (e.g., checks if Bob has apples to trade).</li>
+<li>
+<p>Executes the action and applies its effects to the entities involved.</p>
+</li>
+<li>
+<p><strong>Fallback Mechanisms</strong>  </p>
+</li>
+<li>If a sub-environment cannot process the action, it either:<ul>
+<li>Marks the action as failed, or</li>
+<li>Provides feedback to the main agent for adjustment.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="types-of-sub-environments">Types of Sub-environments<a class="headerlink" href="#types-of-sub-environments" title="Permanent link">&para;</a></h2>
+<h3 id="1-navigation-sub-environment">1. Navigation Sub-environment<a class="headerlink" href="#1-navigation-sub-environment" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Handles actions related to movement and exploration.</li>
+<li>Examples:</li>
+<li><em>"Move to the forest."</em></li>
+<li><em>"Explore the cave."</em></li>
+</ul>
+<h3 id="2-crafting-sub-environment">2. Crafting Sub-environment<a class="headerlink" href="#2-crafting-sub-environment" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Processes crafting-related actions.</li>
+<li>Examples:</li>
+<li><em>"Craft a sword using iron and wood."</em></li>
+<li><em>"Repair the plow."</em></li>
+</ul>
+<h3 id="3-trading-sub-environment">3. Trading Sub-environment<a class="headerlink" href="#3-trading-sub-environment" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Manages trade and barter actions between agents.</li>
+<li>Examples:</li>
+<li><em>"Trade apples with Bob for coins."</em></li>
+<li><em>"Sell iron ore to the blacksmith."</em></li>
+</ul>
+<h3 id="4-combat-sub-environment">4. Combat Sub-environment<a class="headerlink" href="#4-combat-sub-environment" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Handles combat-related interactions.</li>
+<li>Examples:</li>
+<li><em>"Attack the goblin with a sword."</em></li>
+<li><em>"Defend against the dragon’s fire breath."</em></li>
+</ul>
+<hr />
+<h2 id="error-handling">Error Handling<a class="headerlink" href="#error-handling" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Unsupported Actions</strong>  </li>
+<li>If no sub-environment can process the action, it is marked as unsupported.</li>
+<li>
+<p>Feedback is logged for debugging.</p>
+</li>
+<li>
+<p><strong>Failed Preconditions</strong>  </p>
+</li>
+<li>Sub-environments log detailed errors when preconditions for actions are not met.</li>
+</ol>
+<hr />
+<h2 id="use-cases-for-sub-environments">Use Cases for Sub-environments<a class="headerlink" href="#use-cases-for-sub-environments" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Modular Design</strong>: Separate concerns for different action types.</li>
+<li><strong>Complex Scenarios</strong>: Handle intricate interactions like multi-step quests.</li>
+<li><strong>Extensibility</strong>: Easily add or modify sub-environments to introduce new behaviors.</li>
+</ol>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>To learn more about how sub-environments interact with the environment and main agents, explore:<br />
+- <a href="environment.html">Environment Design</a><br />
+- <a href="action_validation.html">Action Validation</a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="environment.html" class="btn btn-neutral float-left" title="Environment Design"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../advanced/scalability.html" class="btn btn-neutral float-right" title="Scalability">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="environment.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../advanced/scalability.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

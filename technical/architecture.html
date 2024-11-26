@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Reuben John" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Architecture - Token World</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Architecture";
+        var mkdocs_page_input_path = "technical/architecture.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../index.html" class="icon icon-home"> Token World
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">About</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/introduction.html">Introduction</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../about/vision.html">Vision & Goals</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Features</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/index.html">Overview</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/dynamic_mechanics.html">Dynamic Mechanics Generation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/grounding.html">Grounding Mechanisms</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/partial_observability.html">Partial Observability</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/installation.html">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../getting_started/quick_start.html">Quick Start Guide</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/customization.html">Customization</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" >Examples</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/small_town.html">Small Town Simulation</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/role_playing.html">Role-Playing Game</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../usage/examples/experimental.html">Experimental Scenarios</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage/debugging_tool.html">Debugging Tool</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Technical Details</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Architecture</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#core-components">Core Components</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#system-workflow">System Workflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modular-design">Modular Design</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scalability">Scalability</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#diagram-system-architecture">Diagram: System Architecture</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#next-steps">Next Steps</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="action_validation.html">Action Validation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="environment.html">Environment Design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="sub_agents.html">Sub-Agent Delegation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Advanced Topics</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/scalability.html">Scalability</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/agent_evolution.html">Agent Evolution</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../advanced/integrating_models.html">Integrating New Models</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Contributing</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/how_to_contribute.html">How to Contribute</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/coding_standards.html">Coding Standards</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../contributing/reporting_issues.html">Reporting Issues</a>
+                  </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../acknowledgments.html">Acknowledgments</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Token World</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html" class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Technical Details</li>
+      <li class="breadcrumb-item active">Architecture</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h1>
+<p>Token World is designed with modularity, scalability, and flexibility in mind. This section provides an in-depth look at the framework's architecture, including its core components and how they interact.</p>
+<hr />
+<h2 id="core-components">Core Components<a class="headerlink" href="#core-components" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Agents</strong>  </li>
+<li>Represent autonomous entities in the simulation.</li>
+<li>Defined by their <strong>roles</strong>, <strong>personalities</strong>, and <strong>abilities</strong>.</li>
+<li>
+<p>Generate natural language actions that interact with the environment.</p>
+</li>
+<li>
+<p><strong>Environment</strong>  </p>
+</li>
+<li>The simulation’s central system, managing entities and grounding agent actions.</li>
+<li>Handles preconditions, effects, and updates for all interactions.</li>
+<li>
+<p>Dynamically adapts as new mechanics are generated during the simulation.</p>
+</li>
+<li>
+<p><strong>Entities</strong>  </p>
+</li>
+<li>Represent objects, resources, and structures in the simulation.</li>
+<li>Stored in an SQLite database for efficient querying and state management.</li>
+<li>
+<p>Defined by unique properties and attributes.</p>
+</li>
+<li>
+<p><strong>Grounding Mechanisms</strong>  </p>
+</li>
+<li>Validate agent actions by checking preconditions and applying effects.</li>
+<li>Ensure logical consistency and prevent hallucinations.</li>
+<li>
+<p>Dynamically generate new mechanics as needed.</p>
+</li>
+<li>
+<p><strong>Debugging Tool</strong>  </p>
+</li>
+<li>Provides a real-time interface for observing agent interactions and entity states.</li>
+<li>Designed to help troubleshoot and analyze complex scenarios.</li>
+</ol>
+<hr />
+<h2 id="system-workflow">System Workflow<a class="headerlink" href="#system-workflow" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Agent Action Generation</strong>  </li>
+<li>Agents use large language models (LLMs) to generate natural language actions.</li>
+<li>
+<p>Example: <em>"Plant crops in the field."</em></p>
+</li>
+<li>
+<p><strong>Action Validation</strong>  </p>
+</li>
+<li>
+<p>The environment validates the action using grounding mechanisms:</p>
+<ul>
+<li>Checks preconditions (e.g., field must be empty).</li>
+<li>Applies effects (e.g., crops are planted, field state updated).</li>
+</ul>
+</li>
+<li>
+<p><strong>State Updates</strong>  </p>
+</li>
+<li>Entities are updated based on the action's effects.</li>
+<li>
+<p>Example: Field’s status changes to <em>"planted,"</em> and crops are added as new entities.</p>
+</li>
+<li>
+<p><strong>Dynamic Evolution</strong>  </p>
+</li>
+<li>New mechanics are generated on demand.</li>
+<li>
+<p>Example: If agents discover a forest, new interactions like <em>"chop wood"</em> become available.</p>
+</li>
+<li>
+<p><strong>Logging and Visualization</strong>  </p>
+</li>
+<li>All interactions and state changes are logged.</li>
+<li>The debugging tool provides a graphical interface for real-time analysis.</li>
+</ol>
+<hr />
+<h2 id="modular-design">Modular Design<a class="headerlink" href="#modular-design" title="Permanent link">&para;</a></h2>
+<p>Token World is built with modularity to enable easy extension and customization:</p>
+<ul>
+<li><strong>Agents Module</strong>: Define agent roles, behaviors, and actions.</li>
+<li><strong>Environment Module</strong>: Manages entities, actions, and mechanics.</li>
+<li><strong>Grounding Module</strong>: Validates and executes actions.</li>
+<li><strong>Web Interface</strong>: Debugging tool built using Flask for visualization.</li>
+</ul>
+<hr />
+<h2 id="scalability">Scalability<a class="headerlink" href="#scalability" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Local Simulations</strong>: Optimized for small to medium-scale simulations on personal laptops.</li>
+<li><strong>Distributed Systems</strong>: Can be extended for larger simulations using distributed architectures.</li>
+<li><strong>Model Flexibility</strong>: Supports lightweight LLMs for efficiency, with the option to integrate more powerful models as needed.</li>
+</ol>
+<hr />
+<h2 id="diagram-system-architecture">Diagram: System Architecture<a class="headerlink" href="#diagram-system-architecture" title="Permanent link">&para;</a></h2>
+<p>(Include a simple diagram showing the flow of data between agents, the environment, entities, and grounding mechanisms.)</p>
+<hr />
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>Explore specific technical details:
+- <a href="action_validation.html">Action Validation</a>
+- <a href="environment.html">Environment Design</a>
+- <a href="sub_agents.html">Sub-Agent Delegation</a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../usage/debugging_tool.html" class="btn btn-neutral float-left" title="Debugging Tool"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="action_validation.html" class="btn btn-neutral float-right" title="Action Validation">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../usage/debugging_tool.html" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="action_validation.html" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
