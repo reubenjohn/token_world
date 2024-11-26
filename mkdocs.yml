@@ -1,2 +1,57 @@
-site_name: token_world
-theme: readthedocs
+site_name: Token World
+site_description: A dynamic, multi-agent simulation framework leveraging large language models.
+site_author: Reuben John
+use_directory_urls: false
+theme:
+  name: readthedocs
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - search.highlight
+    - search.share
+
+nav:
+  - Home: index.md
+  - About:
+      - Introduction: about/introduction.md
+      - Vision & Goals: about/vision.md
+  - Features:
+      - Overview: features/index.md
+      - Dynamic Mechanics Generation: features/dynamic_mechanics.md
+      - Grounding Mechanisms: features/grounding.md
+      - Partial Observability: features/partial_observability.md
+  - Getting Started:
+      - Installation: getting_started/installation.md
+      - Quick Start Guide: getting_started/quick_start.md
+  - Usage:
+      - Customization: usage/customization.md
+      - Examples:
+          - Small Town Simulation: usage/examples/small_town.md
+          - Role-Playing Game: usage/examples/role_playing.md
+          - Experimental Scenarios: usage/examples/experimental.md
+      - Debugging Tool: usage/debugging_tool.md
+  - Technical Details:
+      - Architecture: technical/architecture.md
+      - Action Validation: technical/action_validation.md
+      - Environment Design: technical/environment.md
+      - Sub-Agent Delegation: technical/sub_agents.md
+  - Advanced Topics:
+      - Scalability: advanced/scalability.md
+      - Agent Evolution: advanced/agent_evolution.md
+      - Integrating New Models: advanced/integrating_models.md
+  - Contributing:
+      - How to Contribute: contributing/how_to_contribute.md
+      - Coding Standards: contributing/coding_standards.md
+      - Reporting Issues: contributing/reporting_issues.md
+  - License: license.md
+  - Acknowledgments: acknowledgments.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - toc:
+      permalink: True
+  - footnotes
+  - codehilite
+  - admonition
