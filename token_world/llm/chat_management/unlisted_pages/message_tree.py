@@ -1,7 +1,6 @@
 from time import sleep
-from numpy import isin
 import streamlit as st
-from swarm import Agent
+from swarm import Agent  # type: ignore[import]
 from token_world.llm.chat_management.components.message import display_node
 from token_world.llm.chat_management.components.message_tree import (
     display_tree,
