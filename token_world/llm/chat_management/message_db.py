@@ -157,8 +157,7 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         cursor.execute(
             """SELECT id, parent_id, role, content
             FROM message_node
-            WHERE tree_id = ?
-            ORDER BY created_at""",
+            WHERE tree_id = ?""",
             (tree.id,),
         )
         nodes = cursor.fetchall()
@@ -196,4 +195,14 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         node.parent.children.remove(node)
         cursor = self._conn.cursor()
         cursor.execute("DELETE FROM message_node WHERE id = ?", (node.id,))
+        self._conn.commit()
+
+    def update_node(self, node: MessageNodeT):
+        if node.tree.id not in self.entries:
+            raise ValueError(f"Tree with id {node.tree.id} does not exist")
+        cursor = self._conn.cursor()
+        cursor.execute(
+            "UPDATE message_node SET role = ?, content = ? WHERE id = ?",
+            (node.message["role"], node.message["content"], node.id),
+        )
         self._conn.commit()

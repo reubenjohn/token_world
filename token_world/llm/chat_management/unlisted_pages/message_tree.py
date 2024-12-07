@@ -44,33 +44,70 @@ def display_node(
     if child_selections is None:
         child_selections = st.session_state.child_selections
 
-    if not current_node.is_root():
-        siblings = current_node.parent.children
-        self_index = child_selections.get(current_node.parent.id, 0)
-        with st.chat_message(current_node.message["role"]):
-            st.markdown(current_node.message["content"])
+    if current_node.is_root():
+        return
 
-            # draw navigation arrows side-by-side and right justify
-            col1, col2, col3, col4 = st.columns([6, 1, 1, 1])
-            with col2:
-                if self_index > 0:
-                    if st.button("⬅️"):
-                        child_selections[current_node.parent.id] = self_index - 1
-                        st.rerun()
-            with col3:
-                if self_index < len(siblings) - 1:
-                    if st.button("➡️"):
-                        child_selections[current_node.parent.id] = self_index + 1
-                        st.rerun()
-            with col4:
-                # delete message
-                if st.button("🗑️", key=current_node.id):
-                    message_tree_db.delete_node(current_node)
-                    if self_index == 1:
-                        child_selections.pop(current_node.parent.id)
-                    else:
-                        child_selections[current_node.parent.id] = max(0, self_index - 1)
+    siblings = current_node.parent.children
+    self_index = child_selections.get(current_node.parent.id, 0)
+    with st.chat_message(current_node.message["role"]):
+
+        # draw navigation arrows side-by-side and right justify
+        col1, col2, col3, col4 = st.columns([6, 1, 1, 1])
+
+        with col1:
+            preview, edit = st.tabs(
+                [
+                    "Preview",
+                    "Edit",
+                ]
+            )
+
+        with col2:
+            if self_index > 0:
+                if st.button("⬅️", key=f"<{current_node.id}"):
+                    child_selections[current_node.parent.id] = self_index - 1
                     st.rerun()
+        with col3:
+            if self_index < len(siblings) - 1:
+                if st.button("➡️", key=f">{current_node.id}"):
+                    child_selections[current_node.parent.id] = self_index + 1
+                    st.rerun()
+        with col4:
+            if st.button("🗑️", key=f"delete-{current_node.id}"):
+                message_tree_db.delete_node(current_node)
+                if self_index == 1:
+                    child_selections.pop(current_node.parent.id)
+                else:
+                    child_selections[current_node.parent.id] = max(0, self_index - 1)
+                st.rerun()
+
+        with preview:
+            st.markdown(current_node.message["content"])
+        with edit:
+            content = st.text_area(
+                "Edit message",
+                current_node.message["content"],
+                key=f"content-{current_node.id}",
+            )
+            col1, col2 = st.columns(2)
+            with col1:
+                edit_in_place = st.checkbox("Edit in place", key=f"edit-in-place-{current_node.id}")
+            with col2:
+                if st.button("Save", key=f"save-{current_node.id}"):
+                    if edit_in_place:
+                        current_node.message["content"] = content
+                        message_tree_db.update_node(current_node)
+                        st.write("Message updated in place.")
+                    else:
+                        edit_node = current_node.parent.add_child(
+                            {**current_node.message, "content": content}
+                        )
+                        message_tree_db.add_message_node(edit_node)
+                        child_selections[current_node.parent.id] = (
+                            len(current_node.parent.children) - 1
+                        )
+                        st.write("New edit node added.")
+                        st.rerun()
 
 
 def main():

@@ -213,3 +213,28 @@ def test_delete_root_node(message_tree_db: MessageTreeDB):
     message_tree_db.add_tree(tree)
     with pytest.raises(ValueError, match="Cannot delete root node"):
         message_tree_db.delete_node(tree.root)
+
+
+def test_update_node(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = tree.root.add_child(child_message)
+    message_tree_db.add_message_node(child_node)
+    child_message["content"] = "updated_child_message"
+
+    message_tree_db.update_node(child_node)
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT content FROM message_node WHERE id = ?", (child_node.id,))
+        content = cursor.fetchone()[0]
+        assert content == "updated_child_message"
+
+
+def test_update_node_tree_does_not_exist(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    root = tree.root
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = root.add_child(child_message)
+    with pytest.raises(ValueError, match=f"Tree with id {tree.id} does not exist"):
+        message_tree_db.update_node(child_node)
