@@ -11,10 +11,9 @@ from token_world.llm.stream_processing import (
 
 def assert_stream(stream: Iterable[StreamElement], expected_stream: List[StreamElement]):
     stream = list(stream)
-    for actual in zip(stream, expected_stream):
+    for actual in stream:
         if isinstance(actual, MessageStream):
             actual.cache()
-            raise RuntimeError(actual.content)
 
     assert stream == expected_stream
 
