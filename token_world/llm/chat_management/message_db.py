@@ -165,3 +165,19 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         row_iter: Iterable[_NodeQueryRow] = (_NodeQueryRow(*row) for row in nodes)
         tree_reconstructor = TreeReconstructor(tree, row_iter)
         return tree_reconstructor.reconstruct()
+
+    def wipe(self):
+        self.entries.clear()
+        cursor = self._conn.cursor()
+        cursor.execute("DELETE FROM message_tree")
+        cursor.execute("DELETE FROM message_node")
+        self._conn.commit()
+
+    def delete_tree(self, tree: MessageTreeT):
+        if tree.id not in self.entries:
+            raise ValueError(f"Tree with id {tree.id} does not exist")
+        del self.entries[tree.id]
+        cursor = self._conn.cursor()
+        cursor.execute("DELETE FROM message_tree WHERE id = ?", (tree.id,))
+        cursor.execute("DELETE FROM message_node WHERE tree_id = ?", (tree.id,))
+        self._conn.commit()

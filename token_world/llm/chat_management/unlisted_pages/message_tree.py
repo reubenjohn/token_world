@@ -42,6 +42,12 @@ def main():
     if "child_selections" not in st.session_state:
         st.session_state.child_selections = {}
 
+    if st.button("🗑️ Delete Tree"):
+        message_tree_db.delete_tree(entry.tree)
+        # Redirect to message trees page
+        st.switch_page("unlisted_pages/message_trees.py")
+        return
+
     leaf_node = display_tree(entry.tree, st.session_state.child_selections)
 
     # Get user input

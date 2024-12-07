@@ -25,7 +25,7 @@ def show_message_trees():
     st.title("Message Trees")
 
     message_tree_db = get_message_tree_db()
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         st.metric(label="Number of Trees", value=len(message_tree_db.entries))
@@ -33,6 +33,18 @@ def show_message_trees():
     with col2:
         if st.button("🔄 Reload Trees"):
             message_tree_db.load()
+
+    with col3:
+        if st.button("🗑️ Delete All Trees"):
+            message_tree_db.wipe()
+            st.rerun()
+            return
+
+    with col4:
+        if st.button("➕ New Tree"):
+            tree = MessageTreeT.new()
+            message_tree_db.add_tree(tree)
+            st.markdown(f"Empty tree created: [Open]({get_tree_link(tree.id)})")
 
     data = [
         {
@@ -52,13 +64,6 @@ def show_message_trees():
             )
         },
     )
-
-    # if st.button("Delete All Trees"):
-    #   message_tree_db.clear_trees()
-
-    if st.button("Create Empty Tree"):
-        message_tree_db.add_tree(MessageTreeT.new())
-        st.rerun()
 
 
 show_message_trees()

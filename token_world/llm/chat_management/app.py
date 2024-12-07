@@ -14,7 +14,9 @@ def parse_args():
 def main():
     message_trees_page = st.Page("unlisted_pages/message_trees.py", title="🌲 Message Trees")
     message_tree = st.Page("unlisted_pages/message_tree.py", title="🌳 Message Tree")
-    database_info_page = st.Page("unlisted_pages/database_info.py", title="🛡️ Database Info")
+    database_info_page = st.Page(
+        "unlisted_pages/database_management.py", title="🛡️ Database Management"
+    )
 
     page = st.navigation([message_trees_page, message_tree, database_info_page])
 
