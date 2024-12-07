@@ -1,114 +1,25 @@
 from time import sleep
-from typing import Dict, Optional
+from numpy import isin
 import streamlit as st
-from token_world.llm.chat_management.resources import get_message_tree_db
-from token_world.llm.chat_management.message_db import (
-    MessageNodeId,
-    MessageNodeT,
-    MessageTreeDB,
-    MessageTreeT,
+from swarm import Agent
+from token_world.llm.chat_management.components.message import display_node
+from token_world.llm.chat_management.components.message_tree import (
+    display_tree,
+    message_tree_header,
 )
-
-ChildSelections = Dict[MessageNodeId, int]
+from token_world.llm.chat_management.resources import (
+    get_base_model_name,
+    get_message_tree_db,
+    get_swarm_client,
+)
+from token_world.llm.chat_management.message_db import MessageTreeDB, MessageNodeT
+from token_world.llm.stream_processing import MessageStream, parse_streaming_response
 
 
 def data_streamer():
     for word in ["Hello", "world", "!"]:
         yield word + " "
         sleep(0.5)  # Simulate delay
-
-
-def display_tree(
-    tree: MessageTreeT, child_selections: Optional[ChildSelections] = None
-) -> MessageNodeT:
-    if child_selections is None:
-        child_selections = st.session_state.child_selections
-
-    message_tree_db = get_message_tree_db()
-
-    current_node = tree.root
-    while True:
-        display_node(current_node, message_tree_db, child_selections)
-
-        if not current_node.children:
-            break
-        current_node = current_node.children[child_selections.get(current_node.id, 0)]
-    return current_node
-
-
-def display_node(
-    current_node: MessageNodeT,
-    message_tree_db: MessageTreeDB,
-    child_selections: Optional[ChildSelections] = None,
-):
-    if child_selections is None:
-        child_selections = st.session_state.child_selections
-
-    if current_node.is_root():
-        return
-
-    siblings = current_node.parent.children
-    self_index = child_selections.get(current_node.parent.id, 0)
-    with st.chat_message(current_node.message["role"]):
-
-        # draw navigation arrows side-by-side and right justify
-        col1, col2, col3, col4 = st.columns([6, 1, 1, 1])
-
-        with col1:
-            preview, edit = st.tabs(
-                [
-                    "Preview",
-                    "Edit",
-                ]
-            )
-
-        with col2:
-            if self_index > 0:
-                if st.button("⬅️", key=f"<{current_node.id}"):
-                    child_selections[current_node.parent.id] = self_index - 1
-                    st.rerun()
-        with col3:
-            if self_index < len(siblings) - 1:
-                if st.button("➡️", key=f">{current_node.id}"):
-                    child_selections[current_node.parent.id] = self_index + 1
-                    st.rerun()
-        with col4:
-            if st.button("🗑️", key=f"delete-{current_node.id}"):
-                message_tree_db.delete_node(current_node)
-                if self_index == 1:
-                    child_selections.pop(current_node.parent.id)
-                else:
-                    child_selections[current_node.parent.id] = max(0, self_index - 1)
-                st.rerun()
-
-        with preview:
-            st.markdown(current_node.message["content"])
-
-        with edit:
-            content = st.text_area(
-                "Edit message",
-                current_node.message["content"],
-                key=f"content-{current_node.id}",
-            )
-            col1, col2 = st.columns(2)
-            with col1:
-                edit_in_place = st.checkbox("Edit in place", key=f"edit-in-place-{current_node.id}")
-            with col2:
-                if st.button("Save", key=f"save-{current_node.id}"):
-                    if edit_in_place:
-                        current_node.message["content"] = content
-                        message_tree_db.update_node(current_node)
-                        st.write("Message updated in place.")
-                    else:
-                        edit_node = current_node.create_twin(
-                            {**current_node.message, "content": content}, copy_msg=dict
-                        )
-                        message_tree_db.add_subtree(edit_node)
-                        child_selections[current_node.parent.id] = (
-                            len(current_node.parent.children) - 1
-                        )
-                        st.write("New edit node added.")
-                        st.rerun()
 
 
 def main():
@@ -127,44 +38,44 @@ def main():
     if "child_selections" not in st.session_state:
         st.session_state.child_selections = {}
 
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        st.metric(label="Number of Nodes", value=entry.tree.count_nodes())
-
-    with col2:
-        if st.button("🔄 Reload Tree"):
-            message_tree_db.load()
-
-    with col3:
-        if st.button("🗑️ Delete Messages"):
-            message_tree_db.delete_nodes(entry.tree)
-            st.rerun()
-            return
-
-    with col4:
-        if st.button("❌ Delete Tree"):
-            message_tree_db.delete_tree(entry.tree)
-            # Redirect to message trees page
-            st.switch_page("unlisted_pages/message_trees.py")
-            return
-
+    message_tree_header(entry, message_tree_db)
     leaf_node = display_tree(entry.tree)
+    user_input(leaf_node, message_tree_db)
 
-    # Get user input
+
+def user_input(leaf_node: MessageNodeT, message_tree_db: MessageTreeDB):
     if prompt := st.chat_input("Type your message:"):
         user_node = leaf_node.add_child({"role": "user", "content": prompt})
         message_tree_db.add_subtree(user_node)
-        # Display user message
         display_node(user_node, message_tree_db)
 
-        # Generate assistant response (echoing user input in this example)
+        messages = user_node.get_message_chain()
         with st.chat_message("assistant"):
-            text = st.write_stream(data_streamer())
-            assistant_node = user_node.add_child({"role": "assistant", "content": text})
-            message_tree_db.add_subtree(assistant_node)
-            st.rerun()
-            return
+            client = get_swarm_client()
+            try:
+                agent = Agent(model=get_base_model_name())
+
+                response = client.run(agent=agent, messages=messages, stream=True)
+                response = parse_streaming_response(response)
+                for element in response:
+                    if isinstance(element, MessageStream):
+                        if element.role != "assistant":
+                            st.error(
+                                f"MessageStream has unexpected role: '{element.role}'"
+                                " (expected 'assistant')"
+                            )
+                        text = st.write_stream(element.content_stream)
+                        assistant_node = user_node.add_child(
+                            {"role": element.role, "content": text}
+                        )
+                        message_tree_db.add_subtree(assistant_node)
+                    else:
+                        st.write(element)
+                st.rerun()
+                return
+            except Exception as e:
+                st.error(f"Error processing response: {e}")
+                get_swarm_client.clear()  # type: ignore[attr-defined]
 
 
 main()
