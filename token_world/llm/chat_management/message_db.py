@@ -76,7 +76,7 @@ class MessageTreeDB:
     def __init__(self, db_path: Path):
         self.db_path = db_path
         self.entries: Dict[TreeId, TreeEntry] = {}
-        print(f"Connecting to database at {db_path}")
+        logging.info(f"Connecting to database at {db_path}")
         self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
         self._create_table()
 

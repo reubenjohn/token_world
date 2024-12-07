@@ -1,4 +1,5 @@
 import argparse
+import logging
 from pathlib import Path
 import streamlit as st
 
@@ -12,6 +13,20 @@ def parse_args():
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Chat Management")
+    parser.add_argument(
+        "--log_level",
+        type=str,
+        default="INFO",
+        help="Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)",
+    )
+
+    args = parser.parse_args()
+
+    logging.basicConfig(
+        level=args.log_level.upper(), format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+
     message_trees_page = st.Page("unlisted_pages/message_trees.py", title="🌲 Message Trees")
     message_tree = st.Page("unlisted_pages/message_tree.py", title="🌳 Message Tree")
     database_info_page = st.Page(

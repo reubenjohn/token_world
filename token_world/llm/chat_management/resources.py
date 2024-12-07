@@ -15,7 +15,10 @@ def get_message_tree_db() -> MessageTreeDB:
     if not world_dir:
         raise ValueError("WORLD_DIR environment variable not set")
     db = MessageTreeDB(Path(world_dir) / World.DB_FILE)
-    db.load()
+    try:
+        db.load()
+    except Exception as e:
+        st.error(f"Error loading database: {e}", icon="🛡️")
     return db
 
 
