@@ -67,7 +67,7 @@ def test_tree_reconstructor_multiple_nodes():
 def test_add_tree(message_tree_db: MessageTreeDB):
     tree = MessageTreeT.new()
     message_tree_db.add_tree(tree)
-    assert tree.id in message_tree_db.message_trees
+    assert tree.id in message_tree_db.entries
 
 
 def test_add_tree_already_exists(message_tree_db: MessageTreeDB):
@@ -120,7 +120,7 @@ def test_load(message_tree_db: MessageTreeDB, temp_db_path: Path):
     # Reload the database
     message_tree_db = MessageTreeDB(temp_db_path)
     message_tree_db.load()
-    loaded_tree = message_tree_db.message_trees[tree.id]
+    loaded_tree = message_tree_db.entries[tree.id].tree
     assert loaded_tree.id == tree.id
     assert loaded_tree.root.id == tree.root.id
     assert len(loaded_tree.root.children) == 2

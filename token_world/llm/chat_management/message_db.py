@@ -1,8 +1,11 @@
 from collections import defaultdict
+from dataclasses import dataclass
+from datetime import datetime
 import logging
 from pathlib import Path
 from typing import Dict, Iterable, List, NamedTuple, Optional
 import sqlite3
+
 
 from token_world.llm.message_tree import MessageNode, MessageTree, MessageTreeTraversal
 from token_world.llm.llm import Message
@@ -63,11 +66,18 @@ class TreeReconstructor:
         )
 
 
+@dataclass
+class TreeEntry:
+    tree: MessageTreeT
+    created_at: datetime
+
+
 class MessageTreeDB:
     def __init__(self, db_path: Path):
         self.db_path = db_path
-        self.message_trees: Dict[str, MessageTreeT] = {}
-        self._conn = sqlite3.connect(self.db_path)
+        self.entries: Dict[TreeId, TreeEntry] = {}
+        print(f"Connecting to database at {db_path}")
+        self._conn = sqlite3.connect(self.db_path, check_same_thread=False)
         self._create_table()
 
     def _create_table(self):
@@ -94,16 +104,20 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         self._conn.commit()
 
     def add_tree(self, tree: MessageTreeT):
-        if tree.id in self.message_trees:
+        if tree.id in self.entries:
             raise ValueError(f"Tree with id {tree.id} already exists")
-        self.message_trees[tree.id] = tree
+        entry = TreeEntry(tree=tree, created_at=datetime.now())
+        self.entries[tree.id] = entry
         cursor = self._conn.cursor()
-        cursor.execute("INSERT INTO message_tree (id) VALUES (?)", (tree.id,))
+        cursor.execute(
+            "INSERT INTO message_tree (id, created_at) VALUES (?, ?)",
+            (entry.tree.id, entry.created_at),
+        )
         self._conn.commit()
         self.add_message_node(tree.root)
 
     def add_message_node(self, node: MessageNodeT):
-        if node.tree.id not in self.message_trees:
+        if node.tree.id not in self.entries:
             raise ValueError(f"Tree with id {node.tree.id} does not exist")
         cursor = self._conn.cursor()
         if node.is_root():
@@ -130,10 +144,13 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         cursor.execute("SELECT count(id) FROM message_tree")
         count = cursor.fetchone()
         logging.info(f"Loading {count[0]} message trees")
-        cursor.execute("SELECT id FROM message_tree")
-        for (tree_id,) in cursor.fetchall():
-            tree = MessageTreeT.new(id=tree_id)
-            self.message_trees[tree_id] = self._load_tree(tree)
+        cursor.execute("SELECT id, created_at FROM message_tree")
+        for tree_id, created_at in cursor.fetchall():
+            entry = TreeEntry(
+                tree=MessageTreeT.new(id=tree_id), created_at=datetime.fromisoformat(created_at)
+            )
+            self._load_tree(entry.tree)
+            self.entries[tree_id] = entry
 
     def _load_tree(self, tree: MessageTreeT) -> MessageTreeT:
         cursor = self._conn.cursor()
