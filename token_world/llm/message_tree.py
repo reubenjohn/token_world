@@ -4,7 +4,7 @@ import uuid
 
 
 TreeId = str
-MessageNodeId = int
+MessageNodeId = str
 Message = TypeVar("Message")
 
 
