@@ -18,13 +18,16 @@ def assert_tree_root(tree: MessageTreeStr):
     assert tree.root.is_root()
 
 
-def assert_leaf_node(
-    node: MessageNodeStr, tree: MessageTreeStr, message: str, parent: MessageNodeStr
-):
+def assert_node(node: MessageNodeStr, tree: MessageTreeStr, message: str, parent: MessageNodeStr):
     assert node.tree is tree
     assert node.parent is parent
     assert node.message == message
-    assert node.children == []
+
+
+def assert_leaf_node(
+    node: MessageNodeStr, tree: MessageTreeStr, message: str, parent: MessageNodeStr
+):
+    assert_node(node, tree, message, parent)
 
 
 def assert_children(node: MessageNodeStr, children: List[MessageNodeStr]):
@@ -122,6 +125,50 @@ def test_message_node_get_message_chain():
         another_child_message,
         another_grandchild_message,
     ]
+
+
+def test_message_node_create_twin():
+    tree = MessageTreeStr.new()
+    root = tree.root
+
+    # Adding a child to the root
+    child_message = "child_message"
+    child_node = root.add_child(child_message)
+
+    # Cloning the child node
+    new_child_message1 = "new_child_message1"
+    twin1 = child_node.create_twin(new_child_message1, lambda x: x)
+    assert_children(root, [child_node, twin1])
+    assert_leaf_node(child_node, tree, child_message, root)
+    assert_leaf_node(twin1, tree, new_child_message1, root)
+
+    # Adding a grandchild to the child node
+    grandchild_message = "grandchild_message"
+    grandchild_node = child_node.add_child(grandchild_message)
+
+    # Cloning the child node with a grandchild
+    new_child_message2 = "new_child_message2"
+    twin2 = child_node.create_twin(new_child_message2, lambda x: x)
+    assert_children(root, [child_node, twin1, twin2])
+
+    assert_node(child_node, tree, child_message, root)
+    assert_children(child_node, [grandchild_node])
+    assert_leaf_node(grandchild_node, tree, grandchild_message, child_node)
+
+    assert_leaf_node(twin1, tree, new_child_message1, root)
+
+    assert_node(twin2, tree, new_child_message2, root)
+    assert_children(twin2, [twin2.children[0]])
+    assert_leaf_node(twin2.children[0], tree, grandchild_message, twin2)
+
+
+def test_message_node_create_twin_root():
+    tree = MessageTreeStr.new()
+    root = tree.root
+
+    # Root node should raise ValueError when cloning
+    with pytest.raises(ValueError, match="Root node cannot be cloned"):
+        _ = root.create_twin("child_message", lambda x: x)
 
 
 def test_message_tree_count_nodes():

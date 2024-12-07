@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Generic, List, Optional, TypeVar
+from typing import Callable, Generic, List, Optional, TypeVar
 import uuid
-
 
 TreeId = str
 MessageNodeId = str
@@ -44,6 +43,27 @@ class MessageNode(Generic[Message]):
             node = node.parent
         chain.reverse()
         return chain
+
+    def create_twin(
+        self, message: Message, copy_msg: Callable[[Message], Message]
+    ) -> "MessageNode":
+        if self.is_root():
+            raise ValueError("Root node cannot be cloned")
+
+        twin = self.parent.add_child(message)
+        twin.children = self.children
+
+        stack = [twin]
+        while stack:
+            copy = stack.pop()
+            original_children = copy.children
+            copy.children = []
+            for original_child in original_children:
+                child_copy = copy.add_child(copy_msg(original_child.message))
+                child_copy.children = original_child.children
+            stack.extend(copy.children)
+
+        return twin
 
 
 @dataclass
