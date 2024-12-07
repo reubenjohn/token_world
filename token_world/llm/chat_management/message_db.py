@@ -36,7 +36,6 @@ class TreeReconstructor:
         if len(self._children_map) == 0:
             return self._tree
 
-        print(f"{self._children_map=}")
         roots = self._children_map[None]
         if len(roots) != 1:
             raise ValueError(f"No unique root node found. Expected 1, found {len(roots)} roots")

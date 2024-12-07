@@ -35,6 +35,15 @@ def test_tree_reconstructor_empty():
     assert reconstructed_tree.root.children == []
 
 
+def test_tree_reconstructor_no_root():
+    rows = [
+        _NodeQueryRow(id="child1", parent_id="root", role="user", content="child1"),
+        _NodeQueryRow(id="child2", parent_id="root", role="user", content="child2"),
+    ]
+    with pytest.raises(ValueError):
+        TreeReconstructor(MessageTreeT.new(), iter(rows)).reconstruct()
+
+
 def test_tree_reconstructor_single_node():
     root_row = _NodeQueryRow(id="root", parent_id=None, role="root", content="root")
     reconstructed_tree = TreeReconstructor(MessageTreeT.new(), iter([root_row])).reconstruct()
@@ -61,6 +70,13 @@ def test_add_tree(message_tree_db: MessageTreeDB):
     assert tree.id in message_tree_db.message_trees
 
 
+def test_add_tree_already_exists(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    with pytest.raises(ValueError, match=f"Tree with id {tree.id} already exists"):
+        message_tree_db.add_tree(tree)
+
+
 def test_add_message_node(message_tree_db: MessageTreeDB):
     tree = MessageTreeT.new()
     tree_id = tree.id
@@ -80,6 +96,15 @@ def test_add_message_node(message_tree_db: MessageTreeDB):
         )
         row = cursor.fetchone()
         assert row == (child_id, tree_id, root_id, "user", "child_message")
+
+
+def test_add_message_node_tree_does_not_exist(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    root = tree.root
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = root.add_child(child_message)
+    with pytest.raises(ValueError, match=f"Tree with id {tree.id} does not exist"):
+        message_tree_db.add_message_node(child_node)
 
 
 def test_load(message_tree_db: MessageTreeDB, temp_db_path: Path):
