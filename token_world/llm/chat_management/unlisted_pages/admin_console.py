@@ -1,10 +1,17 @@
 import os
+from dotenv import load_dotenv
 import streamlit as st
 from token_world.llm.chat_management.resources import get_message_tree_db
 
 
-def show_database_info_page():
-    st.title("Database Management")
+def show_admin_console():
+    load_dotenv()
+    st.title("Admin Console")
+
+    with st.expander("Environment Variables"):
+        st.table(os.environ.items())
+
+    st.subheader("Database Information")
     st.write(f"World Directory: {os.getenv('WORLD_DIR')}")
     message_tree_db = get_message_tree_db()
     st.write(f"Database Path: {message_tree_db.db_path}")
@@ -13,4 +20,4 @@ def show_database_info_page():
         get_message_tree_db.clear()
 
 
-show_database_info_page()
+show_admin_console()
