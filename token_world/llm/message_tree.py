@@ -1,13 +1,17 @@
 from dataclasses import dataclass, field
 from typing import Generic, List, Optional, TypeVar
+import uuid
 
 
+TreeId = str
+MessageNodeId = int
 Message = TypeVar("Message")
 
 
 @dataclass
 class MessageNode(Generic[Message]):
     tree: "MessageTree"
+    id: MessageNodeId = field(default_factory=lambda: MessageNodeId(uuid.uuid4()))
     _message: Optional[Message] = None
     _parent: Optional["MessageNode"] = None
     children: List["MessageNode"] = field(default_factory=list)
@@ -45,13 +49,18 @@ class MessageNode(Generic[Message]):
 @dataclass
 class MessageTree(Generic[Message]):
     root: MessageNode[Message]
+    id: TreeId = field(default_factory=lambda: TreeId(uuid.uuid4()))
 
     @staticmethod
-    def new(root: Optional[MessageNode[Message]] = None):
+    def new(
+        root: Optional[MessageNode[Message]] = None, id: Optional[TreeId] = None
+    ) -> "MessageTree[Message]":
         tree: MessageTree = None  # type: ignore
         if root is None:
             root = MessageNode[Message](tree=tree, _message=None, _parent=None, children=[])
         root.tree = MessageTree(root=root)
+        if id is not None:
+            root.tree.id = id
         return root.tree
 
 

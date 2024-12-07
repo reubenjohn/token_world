@@ -1,3 +1,4 @@
+import re
 from typing import List
 import pytest
 from token_world.llm.message_tree import MessageTree, MessageNode, MessageTreeTraversal
@@ -230,3 +231,54 @@ def test_message_tree_traversal_go_to_ancestor():
     # Test ValueError when ancestor is not in the path
     with pytest.raises(ValueError, match="Ancestor not found in the path to the root"):
         traversal.go_to_ancestor(great_grandchild_node)
+
+
+def test_message_node_id():
+    tree = MessageTreeStr.new()
+    root = tree.root
+
+    # Root node should have a unique id
+    assert isinstance(root.id, str)
+    assert len(root.id) > 0
+    # assert matches UUID regex
+    regex = r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    assert re.match(regex, root.id)
+
+    # Adding a child to the root
+    child_message = "child_message"
+    child_node = root.add_child(child_message)
+    assert isinstance(child_node.id, str)
+    assert len(child_node.id) > 0
+    assert child_node.id != root.id
+
+    # Adding another child to the root
+    another_child_message = "another_child_message"
+    another_child_node = root.add_child(another_child_message)
+    assert isinstance(another_child_node.id, str)
+    assert len(another_child_node.id) > 0
+    assert another_child_node.id != root.id
+    assert another_child_node.id != child_node.id
+
+    # Adding a child to the first child node
+    grandchild_message = "grandchild_message"
+    grandchild_node = child_node.add_child(grandchild_message)
+    assert isinstance(grandchild_node.id, str)
+    assert len(grandchild_node.id) > 0
+    assert grandchild_node.id != root.id
+    assert grandchild_node.id != child_node.id
+    assert grandchild_node.id != another_child_node.id
+
+
+def test_message_tree_id():
+    tree1 = MessageTreeStr.new()
+    tree2 = MessageTreeStr.new()
+
+    # Each tree should have a unique id
+    assert isinstance(tree1.id, str)
+    assert len(tree1.id) > 0
+    assert isinstance(tree2.id, str)
+    assert len(tree2.id) > 0
+    assert tree1.id != tree2.id
+
+    # Root nodes of different trees should have different ids
+    assert tree1.root.id != tree2.root.id
