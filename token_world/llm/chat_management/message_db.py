@@ -181,3 +181,19 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
         cursor.execute("DELETE FROM message_tree WHERE id = ?", (tree.id,))
         cursor.execute("DELETE FROM message_node WHERE tree_id = ?", (tree.id,))
         self._conn.commit()
+
+    def delete_nodes(self, tree: MessageTreeT):
+        cursor = self._conn.cursor()
+        tree.root.children.clear()
+        cursor.execute("DELETE FROM message_node WHERE tree_id = ?", (tree.id,))
+        self._conn.commit()
+
+    def delete_node(self, node: MessageNodeT):
+        if node.tree.id not in self.entries:
+            raise ValueError(f"Tree with id {node.tree.id} does not exist")
+        if node.is_root():
+            raise ValueError("Cannot delete root node")
+        node.parent.children.remove(node)
+        cursor = self._conn.cursor()
+        cursor.execute("DELETE FROM message_node WHERE id = ?", (node.id,))
+        self._conn.commit()

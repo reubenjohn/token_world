@@ -130,3 +130,86 @@ def test_load(message_tree_db: MessageTreeDB, temp_db_path: Path):
     assert loaded_tree.root.children[1].id == child_node2.id
     assert loaded_tree.root.children[1].tree.id == child_node2.tree.id
     assert loaded_tree.root.children[1].message == child_message2
+
+
+def test_wipe(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    message_tree_db.wipe()
+    assert len(message_tree_db.entries) == 0
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT count(id) FROM message_tree")
+        count = cursor.fetchone()[0]
+        assert count == 0
+        cursor.execute("SELECT count(id) FROM message_node")
+        count = cursor.fetchone()[0]
+        assert count == 0
+
+
+def test_delete_tree(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    message_tree_db.delete_tree(tree)
+    assert tree.id not in message_tree_db.entries
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT count(id) FROM message_tree WHERE id = ?", (tree.id,))
+        count = cursor.fetchone()[0]
+        assert count == 0
+        cursor.execute("SELECT count(id) FROM message_node WHERE tree_id = ?", (tree.id,))
+        count = cursor.fetchone()[0]
+        assert count == 0
+
+
+def test_delete_tree_does_not_exist(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    with pytest.raises(ValueError, match=f"Tree with id {tree.id} does not exist"):
+        message_tree_db.delete_tree(tree)
+
+
+def test_delete_nodes(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = tree.root.add_child(child_message)
+    message_tree_db.add_message_node(child_node)
+    message_tree_db.delete_nodes(tree)
+    assert len(tree.root.children) == 0
+    assert tree.count_nodes() == 1
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT count(id) FROM message_node WHERE tree_id = ?", (tree.id,))
+        count = cursor.fetchone()[0]
+        assert count == 0
+
+
+def test_delete_node(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = tree.root.add_child(child_message)
+    message_tree_db.add_message_node(child_node)
+    message_tree_db.delete_node(child_node)
+    assert len(tree.root.children) == 0
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT count(id) FROM message_node WHERE id = ?", (child_node.id,))
+        count = cursor.fetchone()[0]
+        assert count == 0
+
+
+def test_delete_node_tree_does_not_exist(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    root = tree.root
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = root.add_child(child_message)
+    with pytest.raises(ValueError, match=f"Tree with id {tree.id} does not exist"):
+        message_tree_db.delete_node(child_node)
+
+
+def test_delete_root_node(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    message_tree_db.add_tree(tree)
+    with pytest.raises(ValueError, match="Cannot delete root node"):
+        message_tree_db.delete_node(tree.root)

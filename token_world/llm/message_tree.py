@@ -63,6 +63,15 @@ class MessageTree(Generic[Message]):
             root.tree.id = id
         return root.tree
 
+    def count_nodes(self) -> int:
+        count = 0
+        stack = [self.root]
+        while stack:
+            node = stack.pop()
+            stack.extend(node.children)
+            count += 1
+        return count
+
 
 @dataclass
 class MessageTreeTraversal(Generic[Message]):

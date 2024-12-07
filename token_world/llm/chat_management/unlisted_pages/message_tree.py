@@ -1,8 +1,13 @@
 from time import sleep
-from typing import Dict
+from typing import Dict, Optional
 import streamlit as st
 from token_world.llm.chat_management.resources import get_message_tree_db
-from token_world.llm.chat_management.message_db import MessageNodeId, MessageNodeT, MessageTreeT
+from token_world.llm.chat_management.message_db import (
+    MessageNodeId,
+    MessageNodeT,
+    MessageTreeDB,
+    MessageTreeT,
+)
 
 ChildSelections = Dict[MessageNodeId, int]
 
@@ -13,17 +18,59 @@ def data_streamer():
         sleep(0.5)  # Simulate delay
 
 
-def display_tree(tree: MessageTreeT, child_selections: ChildSelections) -> MessageNodeT:
+def display_tree(
+    tree: MessageTreeT, child_selections: Optional[ChildSelections] = None
+) -> MessageNodeT:
+    if child_selections is None:
+        child_selections = st.session_state.child_selections
+
+    message_tree_db = get_message_tree_db()
+
     current_node = tree.root
     while True:
-        if not current_node.is_root():
-            with st.chat_message(current_node.message["role"]):
-                st.markdown(current_node.message["content"])
+        display_node(current_node, message_tree_db, child_selections)
+
         if not current_node.children:
             break
-        selected_index = child_selections.get(current_node.id, 0)
-        current_node = current_node.children[selected_index]
+        current_node = current_node.children[child_selections.get(current_node.id, 0)]
     return current_node
+
+
+def display_node(
+    current_node: MessageNodeT,
+    message_tree_db: MessageTreeDB,
+    child_selections: Optional[ChildSelections] = None,
+):
+    if child_selections is None:
+        child_selections = st.session_state.child_selections
+
+    if not current_node.is_root():
+        siblings = current_node.parent.children
+        self_index = child_selections.get(current_node.parent.id, 0)
+        with st.chat_message(current_node.message["role"]):
+            st.markdown(current_node.message["content"])
+
+            # draw navigation arrows side-by-side and right justify
+            col1, col2, col3, col4 = st.columns([6, 1, 1, 1])
+            with col2:
+                if self_index > 0:
+                    if st.button("⬅️"):
+                        child_selections[current_node.parent.id] = self_index - 1
+                        st.rerun()
+            with col3:
+                if self_index < len(siblings) - 1:
+                    if st.button("➡️"):
+                        child_selections[current_node.parent.id] = self_index + 1
+                        st.rerun()
+            with col4:
+                # delete message
+                if st.button("🗑️", key=current_node.id):
+                    message_tree_db.delete_node(current_node)
+                    if self_index == 1:
+                        child_selections.pop(current_node.parent.id)
+                    else:
+                        child_selections[current_node.parent.id] = max(0, self_index - 1)
+                    st.rerun()
 
 
 def main():
@@ -42,28 +89,44 @@ def main():
     if "child_selections" not in st.session_state:
         st.session_state.child_selections = {}
 
-    if st.button("🗑️ Delete Tree"):
-        message_tree_db.delete_tree(entry.tree)
-        # Redirect to message trees page
-        st.switch_page("unlisted_pages/message_trees.py")
-        return
+    col1, col2, col3, col4 = st.columns(4)
 
-    leaf_node = display_tree(entry.tree, st.session_state.child_selections)
+    with col1:
+        st.metric(label="Number of Nodes", value=entry.tree.count_nodes())
+
+    with col2:
+        if st.button("🔄 Reload Tree"):
+            message_tree_db.load()
+
+    with col3:
+        if st.button("🗑️ Delete Messages"):
+            message_tree_db.delete_nodes(entry.tree)
+            st.rerun()
+            return
+
+    with col4:
+        if st.button("❌ Delete Tree"):
+            message_tree_db.delete_tree(entry.tree)
+            # Redirect to message trees page
+            st.switch_page("unlisted_pages/message_trees.py")
+            return
+
+    leaf_node = display_tree(entry.tree)
 
     # Get user input
     if prompt := st.chat_input("Type your message:"):
-        message_tree_db.add_message_node(leaf_node.add_child({"role": "user", "content": prompt}))
+        user_node = leaf_node.add_child({"role": "user", "content": prompt})
+        message_tree_db.add_message_node(user_node)
         # Display user message
-        with st.chat_message("user"):
-            st.markdown(prompt)
+        display_node(user_node, message_tree_db)
 
         # Generate assistant response (echoing user input in this example)
         with st.chat_message("assistant"):
             text = st.write_stream(data_streamer())
-            if isinstance(text, str):
-                message_tree_db.add_message_node(
-                    leaf_node.add_child({"role": "assistant", "content": text})
-                )
+            assistant_node = user_node.add_child({"role": "assistant", "content": text})
+            message_tree_db.add_message_node(assistant_node)
+            st.rerun()
+            return
 
 
 main()

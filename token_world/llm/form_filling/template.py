@@ -13,7 +13,7 @@ class BaseTemplate(ABC):
 
     @abstractmethod
     def get_hint_filled_form(self, indents: str = "") -> str:
-        pass
+        pass  # pragma: no cover
 
 
 def _get_container_hint_filled_form(

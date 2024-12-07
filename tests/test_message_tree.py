@@ -124,6 +124,27 @@ def test_message_node_get_message_chain():
     ]
 
 
+def test_message_tree_count_nodes():
+    tree = MessageTreeStr.new()
+    assert tree.count_nodes() == 1
+
+    # Add a child to the root
+    child_node = tree.root.add_child("child_message")
+    assert tree.count_nodes() == 2
+
+    # Add a grandchild to the child node
+    child_node.add_child("grandchild_message")
+    assert tree.count_nodes() == 3
+
+    # Add another child to the root
+    another_child_node = tree.root.add_child("another_child_message")
+    assert tree.count_nodes() == 4
+
+    # Add a child to the new child node
+    another_child_node.add_child("another_grandchild_message")
+    assert tree.count_nodes() == 5
+
+
 def test_message_tree_traversal_go_to_new_child():
     traversal = MessageTreeTraversalStr.new()
     assert traversal.go_to_new_child("child_message") is traversal

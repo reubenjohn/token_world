@@ -4,16 +4,6 @@ from token_world.llm.chat_management.message_db import MessageTreeT
 import pandas as pd
 
 
-def count_nodes(tree: MessageTreeT) -> int:
-    count = 0
-    stack = [tree.root]
-    while stack:
-        node = stack.pop()
-        stack.extend(node.children)
-        count += 1
-    return count
-
-
 def get_first_message(tree: MessageTreeT) -> str:
     if len(tree.root.children) == 0:
         return "<Tree Empty>"
@@ -50,7 +40,7 @@ def show_message_trees():
         {
             "Tree Link": get_tree_link(entry.tree.id),
             "Tree ID": entry.tree.id,
-            "Nodes": count_nodes(entry.tree),
+            "Nodes": entry.tree.count_nodes(),
             "Created At (UTC)": entry.created_at.strftime("%Y-%m-%d %H:%M:%S"),
             "First Message": get_first_message(entry.tree),
         }
