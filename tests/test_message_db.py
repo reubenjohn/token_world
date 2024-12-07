@@ -81,21 +81,57 @@ def test_add_message_node(message_tree_db: MessageTreeDB):
     tree = MessageTreeT.new()
     tree_id = tree.id
     message_tree_db.add_tree(tree)
+
     root = tree.root
     root_id = root.id
+
     child_message = {"role": "user", "content": "child_message"}
     child_node = root.add_child(child_message)
     child_id = child_node.id
-    message_tree_db.add_message_node(child_node)
+
+    message_tree_db.add_subtree(child_node)
 
     with sqlite3.connect(message_tree_db.db_path) as conn:
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, tree_id, parent_id, role, content FROM message_node WHERE id = ?",
-            (child_node.id,),
+            "SELECT id, tree_id, parent_id, role, content FROM message_node ORDER BY created_at",
         )
-        row = cursor.fetchone()
-        assert row == (child_id, tree_id, root_id, "user", "child_message")
+        rows = cursor.fetchall()
+        assert rows == [
+            (root_id, tree_id, None, "root", "root"),
+            (child_id, tree_id, root_id, "user", "child_message"),
+        ]
+
+
+def test_add_message_node_subtree(message_tree_db: MessageTreeDB):
+    tree = MessageTreeT.new()
+    tree_id = tree.id
+    message_tree_db.add_tree(tree)
+
+    root = tree.root
+    root_id = root.id
+
+    child_message = {"role": "user", "content": "child_message"}
+    child_node = root.add_child(child_message)
+    child_id = child_node.id
+
+    grandchild_message = {"role": "user", "content": "grandchild_message"}
+    grandchild_node = child_node.add_child(grandchild_message)
+    grandchild_id = grandchild_node.id
+
+    message_tree_db.add_subtree(child_node)
+
+    with sqlite3.connect(message_tree_db.db_path) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, tree_id, parent_id, role, content FROM message_node ORDER BY created_at",
+        )
+        rows = cursor.fetchall()
+        assert rows == [
+            (root_id, tree_id, None, "root", "root"),
+            (child_id, tree_id, root_id, "user", "child_message"),
+            (grandchild_id, tree_id, child_id, "user", "grandchild_message"),
+        ]
 
 
 def test_add_message_node_tree_does_not_exist(message_tree_db: MessageTreeDB):
@@ -104,7 +140,7 @@ def test_add_message_node_tree_does_not_exist(message_tree_db: MessageTreeDB):
     child_message = {"role": "user", "content": "child_message"}
     child_node = root.add_child(child_message)
     with pytest.raises(ValueError, match=f"Tree with id {tree.id} does not exist"):
-        message_tree_db.add_message_node(child_node)
+        message_tree_db.add_subtree(child_node)
 
 
 def test_load(message_tree_db: MessageTreeDB, temp_db_path: Path):
@@ -114,8 +150,8 @@ def test_load(message_tree_db: MessageTreeDB, temp_db_path: Path):
     child_message2 = {"role": "user", "content": "child_message2"}
     child_node1 = tree.root.add_child(child_message1)
     child_node2 = tree.root.add_child(child_message2)
-    message_tree_db.add_message_node(child_node1)
-    message_tree_db.add_message_node(child_node2)
+    message_tree_db.add_subtree(child_node1)
+    message_tree_db.add_subtree(child_node2)
 
     # Reload the database
     message_tree_db = MessageTreeDB(temp_db_path)
@@ -173,7 +209,7 @@ def test_delete_nodes(message_tree_db: MessageTreeDB):
     message_tree_db.add_tree(tree)
     child_message = {"role": "user", "content": "child_message"}
     child_node = tree.root.add_child(child_message)
-    message_tree_db.add_message_node(child_node)
+    message_tree_db.add_subtree(child_node)
     message_tree_db.delete_nodes(tree)
     assert len(tree.root.children) == 0
     assert tree.count_nodes() == 1
@@ -189,7 +225,7 @@ def test_delete_node(message_tree_db: MessageTreeDB):
     message_tree_db.add_tree(tree)
     child_message = {"role": "user", "content": "child_message"}
     child_node = tree.root.add_child(child_message)
-    message_tree_db.add_message_node(child_node)
+    message_tree_db.add_subtree(child_node)
     message_tree_db.delete_node(child_node)
     assert len(tree.root.children) == 0
     with sqlite3.connect(message_tree_db.db_path) as conn:
@@ -220,7 +256,7 @@ def test_update_node(message_tree_db: MessageTreeDB):
     message_tree_db.add_tree(tree)
     child_message = {"role": "user", "content": "child_message"}
     child_node = tree.root.add_child(child_message)
-    message_tree_db.add_message_node(child_node)
+    message_tree_db.add_subtree(child_node)
     child_message["content"] = "updated_child_message"
 
     message_tree_db.update_node(child_node)

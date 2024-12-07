@@ -114,9 +114,17 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
             (entry.tree.id, entry.created_at),
         )
         self._conn.commit()
-        self.add_message_node(tree.root)
+        self.add_subtree(tree.root)
 
-    def add_message_node(self, node: MessageNodeT):
+    def add_subtree(self, node: MessageNodeT):
+        stack = [node]
+        while stack:
+            current_node = stack.pop()
+            self._add_message_node(current_node)
+            stack.extend(current_node.children)
+        self._conn.commit()
+
+    def _add_message_node(self, node: MessageNodeT):
         if node.tree.id not in self.entries:
             raise ValueError(f"Tree with id {node.tree.id} does not exist")
         cursor = self._conn.cursor()
@@ -137,7 +145,6 @@ FOREIGN KEY (parent_id) REFERENCES message_node(id)
                 content,
             ),
         )
-        self._conn.commit()
 
     def load(self):
         cursor = self._conn.cursor()

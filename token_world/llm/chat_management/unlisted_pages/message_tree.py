@@ -83,6 +83,7 @@ def display_node(
 
         with preview:
             st.markdown(current_node.message["content"])
+
         with edit:
             content = st.text_area(
                 "Edit message",
@@ -99,10 +100,10 @@ def display_node(
                         message_tree_db.update_node(current_node)
                         st.write("Message updated in place.")
                     else:
-                        edit_node = current_node.parent.add_child(
-                            {**current_node.message, "content": content}
+                        edit_node = current_node.create_twin(
+                            {**current_node.message, "content": content}, copy_msg=dict
                         )
-                        message_tree_db.add_message_node(edit_node)
+                        message_tree_db.add_subtree(edit_node)
                         child_selections[current_node.parent.id] = (
                             len(current_node.parent.children) - 1
                         )
@@ -153,7 +154,7 @@ def main():
     # Get user input
     if prompt := st.chat_input("Type your message:"):
         user_node = leaf_node.add_child({"role": "user", "content": prompt})
-        message_tree_db.add_message_node(user_node)
+        message_tree_db.add_subtree(user_node)
         # Display user message
         display_node(user_node, message_tree_db)
 
@@ -161,7 +162,7 @@ def main():
         with st.chat_message("assistant"):
             text = st.write_stream(data_streamer())
             assistant_node = user_node.add_child({"role": "assistant", "content": text})
-            message_tree_db.add_message_node(assistant_node)
+            message_tree_db.add_subtree(assistant_node)
             st.rerun()
             return
 
