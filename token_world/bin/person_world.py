@@ -61,7 +61,9 @@ def main():
 
     physical_entity_handler = PhysicalEntityHandler()
     environment = Environment(client)
-    with people_manager_executor(client, environment) as people_manager, persistent_world(
+    with people_manager_executor(
+        args.world_dir, client, environment
+    ) as people_manager, persistent_world(
         args.world_dir, people_manager, [physical_entity_handler]
     ) as world:
         if not world._entity_manager.entities:

@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from functools import lru_cache
 import logging
+from pathlib import Path
 
 from swarm import Swarm, Agent  # type: ignore[import]
 
@@ -10,11 +11,16 @@ from typing import Dict, Iterator, Optional
 
 from token_world.entity import Entity, physical_entity, EntityId
 from token_world.environment import Environment
+from token_world.llm.chat_management.message_db import (
+    MessageTreeDB,
+    MessageT,
+    MessageNodeT,
+    MessageTreeT,
+)
 from token_world.llm.form_filling.agentic import SwarmRunInference, fill_form
 from token_world.llm.form_filling.template import Template
 from token_world.llm.form_filling.form_filler import FormFiller
 from token_world.llm.form_filling.template_parser import parse_template
-from token_world.llm.llm import Message
 from token_world.llm.message_tree import MessageTreeTraversal
 
 
@@ -66,8 +72,23 @@ You only need to output the filled form. You don't need to output anything else.
 """
 
 
+class PersistentMessageTreeTraversal(MessageTreeTraversal[MessageT]):
+    _db: MessageTreeDB
+
+    def __init__(self, db: MessageTreeDB, node: Optional[MessageNodeT] = None):
+        if node is None:
+            node = MessageTreeT.new().root
+        super().__init__(node=node)
+        self._db = db
+
+    def go_to_new_child(self, message: dict) -> "PersistentMessageTreeTraversal":
+        super().go_to_new_child(message)
+        self._db.add_subtree(self.node)
+        return self
+
+
 class PersonHandler:
-    def __init__(self, entity: Entity):
+    def __init__(self, entity: Entity, message_tree_db: MessageTreeDB):
         self._entity = entity
         self.agent = Agent(
             name=entity.name,
@@ -75,10 +96,13 @@ class PersonHandler:
             # tool_choice="required",
             instructions=PERSON_INSTRUCTIONS,
         )
+        self._message_tree_db = message_tree_db
 
         # self.agent.functions.append(set_goals)
 
-        self.message_traversal = MessageTreeTraversal[Message].new()
+        self.message_traversal = PersistentMessageTreeTraversal(self._message_tree_db)
+        message_tree_db.add_tree(self.message_traversal.node.tree)
+
         self._reaction_filler = get_person_action_form_filler()
 
     def act(self, client: Swarm) -> str:
@@ -98,18 +122,23 @@ class PersonHandler:
 
 
 class PeopleManager:
-    def __init__(self, client: Swarm, environment: Environment):
+    def __init__(self, world_dir: Path, client: Swarm, environment: Environment):
+        world_dir.mkdir(exist_ok=True, parents=True)
+        self._message_tree_db = MessageTreeDB(world_dir / "world.db")
         self._person_handlers: Dict[EntityId, PersonHandler] = {}
         self._is_running = False
         self._client = client
         self._environment = environment
+
+    def load(self):
+        self._message_tree_db.load()
 
     @staticmethod
     def is_person(entity: Entity) -> bool:
         return entity.properties.get("is_person", False)
 
     def add_entity(self, entity: Entity):
-        self._person_handlers[entity.id] = PersonHandler(entity)
+        self._person_handlers[entity.id] = PersonHandler(entity, self._message_tree_db)
 
     def act(self):
         for handler in self._person_handlers.values():
@@ -131,9 +160,12 @@ class PeopleManager:
 
 
 @contextmanager
-def people_manager_executor(client: Swarm, environment: Environment) -> Iterator[PeopleManager]:
+def people_manager_executor(
+    world_dir: Path, client: Swarm, environment: Environment
+) -> Iterator[PeopleManager]:
     with ThreadPoolExecutor(max_workers=1) as executor:
-        people_manager = PeopleManager(client, environment)
+        people_manager = PeopleManager(world_dir, client, environment)
+        people_manager.load()
         executor.submit(people_manager.start_person_loop)
         yield people_manager
         people_manager.stop_person_loop()
