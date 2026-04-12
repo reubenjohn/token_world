@@ -1,4 +1,8 @@
-# token_world
+# token_world (old)
+
+> **⚠️ This repository has been superseded by [token-world](https://github.com/reubenjohn/token-world).** All active development continues there.
+
+---
 
 [![codecov](https://codecov.io/gh/reubenjohn/token_world/branch/main/graph/badge.svg?token=token_world_token_here)](https://codecov.io/gh/reubenjohn/token_world/branch/main)
 [![CI](https://github.com/reubenjohn/token_world/actions/workflows/main.yml/badge.svg)](https://github.com/reubenjohn/token_world/actions/workflows/main.yml)

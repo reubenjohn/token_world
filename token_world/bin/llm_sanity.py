@@ -14,6 +14,9 @@ def main():  # pragma: no cover
     with a predefined prompt. The response is streamed and printed to the console.
     """
 
+    logging.basicConfig(
+        level="DEBUG", format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
     load_dotenv()  # Load environment variables from .env file
 
     parser = argparse.ArgumentParser(description="Token Talkers CLI")
@@ -55,3 +58,7 @@ def main():  # pragma: no cover
 
     for chunk in response:
         print(chunk.choices[0].delta.content, end="")
+
+
+if __name__ == "__main__":
+    main()
